@@ -1,0 +1,1 @@
+# tradingcrypto_fromzerotohero
