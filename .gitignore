@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Builds
+dist/
+build/
+*.tsbuildinfo
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Test artifacts
+coverage/
+playwright-report/
+test-results/
+.vitest/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+*.log
+
+# Local data (SQLite runtime, не коммитим)
+*.sqlite
+*.sqlite-journal
+data/runtime/
