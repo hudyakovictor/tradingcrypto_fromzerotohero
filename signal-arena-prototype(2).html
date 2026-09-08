@@ -1,0 +1,2054 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIGNAL ARENA — UX-прототип · карта экранов</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+ --bg:#0B0C0D;--panel:#111315;--surf:#181B1E;--surf2:#212528;--surf3:#2B3034;
+ --bd:rgba(255,255,255,.12);--bd2:rgba(255,255,255,.22);--bd3:rgba(255,255,255,.34);
+ --tx:#F1F3F4;--tx2:#989EA4;--tx3:#666C72;
+ --acid:#C8F135;--cyan:#57D2E6;--mag:#FF4D8D;--amber:#F2B33D;--red:#E9605A;--green:#5FCB8B;--violet:#A98BE8;
+ --mono:"SFMono-Regular",Menlo,Consolas,monospace;
+ --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--tx);font:16px/1.5 var(--ui);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.mono{font-family:var(--mono)}
+.lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--tx3)}
+
+/* ============ SHELL ============ */
+.shell{display:grid;grid-template-rows:auto 1fr;height:100vh;overflow:hidden}
+.appbar{display:flex;align-items:center;gap:16px;padding:0 20px;height:56px;border-bottom:1px solid var(--bd);background:var(--panel);flex:0 0 auto}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand b{font-size:14px;letter-spacing:.16em;text-transform:uppercase}
+.brand span{font-family:var(--mono);font-size:10px;color:var(--tx3);letter-spacing:.08em}
+.spacer{flex:1}
+.tgl{display:flex;gap:6px;flex-wrap:wrap}
+.tgl button{border:1px solid var(--bd);border-radius:7px;padding:6px 11px;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--tx2);min-height:32px}
+.tgl button:hover{border-color:var(--bd3);color:var(--tx)}
+.tgl button[aria-pressed="true"]{background:var(--acid);border-color:var(--acid);color:#12140A;font-weight:600}
+.counter{font-family:var(--mono);font-size:10.5px;color:var(--tx3);white-space:nowrap}
+
+.main{display:grid;grid-template-columns:286px minmax(0,1fr) 348px;min-height:0}
+
+/* ============ NAV ============ */
+.nav{border-right:1px solid var(--bd);background:var(--panel);overflow-y:auto;padding:14px 0 40px}
+.nav .find{margin:0 14px 12px;position:relative}
+.nav .find input{width:100%;background:var(--surf);border:1px solid var(--bd);border-radius:8px;padding:9px 11px;color:var(--tx);font-size:13px;min-height:38px}
+.nav .find input::placeholder{color:var(--tx3)}
+.grp{margin:0 0 4px}
+.grp>h3{display:flex;align-items:center;gap:8px;padding:9px 16px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3)}
+.grp>h3 i{width:16px;height:16px;border:1px solid var(--bd2);border-radius:4px;display:grid;place-items:center;font-style:normal;font-size:9px;color:var(--tx2)}
+.nav a{display:grid;grid-template-columns:34px 1fr;align-items:center;gap:6px;padding:7px 16px 7px 16px;font-size:13px;color:var(--tx2);text-decoration:none;border-left:2px solid transparent;min-height:36px}
+.nav a em{font-family:var(--mono);font-size:10px;font-style:normal;color:var(--tx3)}
+.nav a:hover{background:var(--surf);color:var(--tx)}
+.nav a.on{background:var(--surf2);color:var(--tx);border-left-color:var(--acid)}
+.nav a.on em{color:var(--acid)}
+
+/* ============ STAGE ============ */
+.stage{overflow-y:auto;padding:24px;display:flex;flex-direction:column;align-items:center;gap:16px;background:
+  linear-gradient(0deg,transparent 23px,rgba(255,255,255,.022) 24px),
+  linear-gradient(90deg,transparent 23px,rgba(255,255,255,.022) 24px);background-size:24px 24px}
+.shead{width:100%;max-width:640px;display:flex;align-items:flex-start;gap:14px}
+.shead .id{font-family:var(--mono);font-size:11px;color:var(--acid);border:1px solid rgba(200,241,53,.4);border-radius:6px;padding:4px 8px;flex:0 0 auto}
+.shead h2{font-size:17px;font-weight:600;line-height:1.3}
+.shead p{font-size:12.5px;color:var(--tx2);margin-top:3px}
+.pager{display:flex;gap:8px;align-items:center;flex:0 0 auto;margin-left:auto}
+.pager button{border:1px solid var(--bd);border-radius:7px;width:34px;height:34px;color:var(--tx2);font-size:14px}
+.pager button:hover{border-color:var(--bd3);color:var(--tx)}
+
+/* ============ DEVICE ============ */
+.dev{width:390px;height:844px;flex:0 0 auto;border:1px solid var(--bd2);border-radius:36px;background:#0D0F10;position:relative;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.5),0 18px 50px rgba(0,0,0,.45)}
+.dev:before{content:"";position:absolute;top:9px;left:50%;transform:translateX(-50%);width:104px;height:22px;border-radius:12px;background:#000;z-index:60}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column}
+.sbar{height:40px;flex:0 0 auto;display:flex;align-items:flex-end;justify-content:space-between;padding:0 22px 3px;font-family:var(--mono);font-size:10px;color:var(--tx2)}
+.body{flex:1;min-height:0;overflow-y:auto;padding:0 14px 14px;display:flex;flex-direction:column;gap:10px}
+.body::-webkit-scrollbar{width:0}
+.body.pad0{padding:0 0 14px}
+
+/* topbar in-app */
+.tb{display:flex;align-items:center;gap:6px;padding:6px 0 8px;position:sticky;top:0;background:linear-gradient(#0D0F10 70%,rgba(13,15,16,0));z-index:20}
+.ava{width:28px;height:28px;border-radius:8px;border:1px solid var(--bd2);flex:0 0 auto;display:grid;place-items:center;font-size:11px;color:var(--tx2)}
+.xpwrap{flex:1;min-width:0;border:1px solid var(--bd);border-radius:8px;padding:4px 7px;background:var(--surf)}
+.xpwrap .r{display:flex;justify-content:space-between;font-family:var(--mono);font-size:8.5px;color:var(--tx2);letter-spacing:.06em}
+.bar{height:4px;border-radius:3px;background:var(--surf3);margin-top:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acid)}
+.bar.c i{background:var(--cyan)}.bar.m i{background:var(--mag)}.bar.a i{background:var(--amber)}.bar.g i{background:var(--green)}.bar.r i{background:var(--red)}
+.chip{border:1px solid var(--bd);border-radius:7px;padding:4px 6px;font-family:var(--mono);font-size:9.5px;color:var(--tx2);background:var(--surf);white-space:nowrap;flex:0 0 auto}
+.ico{width:28px;height:28px;border:1px solid var(--bd);border-radius:8px;display:grid;place-items:center;font-size:11px;color:var(--tx2);background:var(--surf);flex:0 0 auto;position:relative}
+.ico b{position:absolute;top:-3px;right:-3px;width:7px;height:7px;border-radius:50%;background:var(--mag)}
+
+/* bottom nav */
+.bn{flex:0 0 auto;height:64px;border-top:1px solid var(--bd);background:var(--panel);display:grid;grid-template-columns:repeat(5,1fr);align-items:center;padding-bottom:6px}
+.bn a{display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--mono);font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--tx3);text-decoration:none;padding-top:4px}
+.bn a i{font-style:normal;font-size:15px;line-height:1;opacity:.75}
+.bn a.on{color:var(--acid)}
+.bn a.on i{opacity:1}
+.bn a.mid i{width:38px;height:38px;border-radius:12px;border:1px solid rgba(200,241,53,.45);background:rgba(200,241,53,.1);display:grid;place-items:center;margin-top:-14px}
+
+/* ============ PRIMITIVES ============ */
+.card{border:1px solid var(--bd);border-radius:10px;background:var(--surf);padding:10px}
+.card.q{background:var(--surf2)}
+.card.dash{border-style:dashed;background:transparent}
+.h{font-size:13px;font-weight:600;line-height:1.25}
+.h2{font-size:11.5px;font-weight:600;color:var(--tx)}
+.t{font-size:11px;color:var(--tx2);line-height:1.45}
+.t3{font-size:10px;color:var(--tx3);line-height:1.4}
+.big{font-size:19px;font-weight:700;letter-spacing:-.01em;line-height:1.15}
+.sec{display:flex;align-items:center;gap:8px;margin-top:2px}
+.sec .ln{flex:1;height:1px;background:var(--bd)}
+.row{display:flex;gap:8px}
+.row.w{flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:8px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.ph{border:1px dashed var(--bd2);border-radius:8px;background:
+  repeating-linear-gradient(135deg,rgba(255,255,255,.03) 0 6px,transparent 6px 12px);
+  display:grid;place-items:center;font-family:var(--mono);font-size:9px;color:var(--tx3);letter-spacing:.08em;text-align:center;padding:6px}
+.btn{border:1px solid var(--bd2);border-radius:9px;padding:9px 10px;font-size:11.5px;font-weight:600;text-align:center;background:var(--surf2);min-height:40px;display:flex;align-items:center;justify-content:center;gap:6px;line-height:1.2}
+.btn.pri{background:var(--acid);border-color:var(--acid);color:#12140A}
+.btn.gho{background:transparent}
+.btn.sm{min-height:30px;padding:5px 9px;font-size:10.5px;font-weight:500}
+.btn.dis{opacity:.42}
+.tag{border:1px solid var(--bd2);border-radius:20px;padding:3px 8px;font-family:var(--mono);font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--tx2);white-space:nowrap}
+.tag.ac{border-color:rgba(200,241,53,.5);color:var(--acid);background:rgba(200,241,53,.08)}
+.tag.cy{border-color:rgba(87,210,230,.5);color:var(--cyan);background:rgba(87,210,230,.08)}
+.tag.mg{border-color:rgba(255,77,141,.5);color:var(--mag);background:rgba(255,77,141,.08)}
+.tag.am{border-color:rgba(242,179,61,.5);color:var(--amber);background:rgba(242,179,61,.08)}
+.tag.gr{border-color:rgba(95,203,139,.5);color:var(--green);background:rgba(95,203,139,.08)}
+.tag.rd{border-color:rgba(233,96,90,.5);color:var(--red);background:rgba(233,96,90,.08)}
+.tag.vi{border-color:rgba(169,139,232,.5);color:var(--violet);background:rgba(169,139,232,.08)}
+.kv{display:flex;justify-content:space-between;gap:8px;font-size:10.5px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.kv:last-child{border-bottom:0}
+.kv span{color:var(--tx2)}
+.kv b{font-weight:600;font-family:var(--mono);font-size:10px}
+.ov{position:absolute;left:0;right:0;bottom:0;top:0;background:rgba(6,7,8,.72);z-index:40;display:flex;align-items:flex-end}
+.sheet{width:100%;border-radius:16px 16px 0 0;border:1px solid var(--bd2);border-bottom:0;background:var(--panel);padding:12px 14px 18px;display:flex;flex-direction:column;gap:9px;max-height:78%;overflow-y:auto}
+.sheet .grab{width:34px;height:3px;border-radius:2px;background:var(--bd3);margin:0 auto 4px}
+.modal{position:absolute;inset:0;background:rgba(6,7,8,.74);z-index:45;display:grid;place-items:center;padding:20px}
+.modal>div{width:100%;border:1px solid var(--bd2);border-radius:14px;background:var(--panel);padding:14px;display:flex;flex-direction:column;gap:10px}
+
+/* browser widget */
+.bw{border:1px solid var(--bd2);border-radius:10px;background:var(--surf);overflow:hidden}
+.bw .chr{display:flex;align-items:center;gap:5px;padding:6px 7px;border-bottom:1px solid var(--bd);background:var(--surf2)}
+.bw .dots{display:flex;gap:3px;margin-right:2px}
+.bw .dots i{width:6px;height:6px;border-radius:50%;background:var(--bd3);display:block}
+.tabs{display:flex;gap:4px;overflow-x:auto;flex:1}
+.tabs::-webkit-scrollbar{height:0}
+.tab{border:1px solid var(--bd);border-radius:6px 6px 0 0;border-bottom:0;padding:4px 7px;font-family:var(--mono);font-size:8.5px;letter-spacing:.05em;color:var(--tx3);white-space:nowrap;background:var(--surf);display:flex;align-items:center;gap:4px;min-height:26px}
+.tab.on{color:#12140A;background:var(--acid);border-color:var(--acid);font-weight:700}
+.tab.lk{opacity:.45;border-style:dashed}
+.bw .url{padding:5px 9px;border-bottom:1px solid var(--bd);font-family:var(--mono);font-size:8.5px;color:var(--tx3);display:flex;justify-content:space-between}
+.bw .view{padding:9px}
+
+/* chart */
+.ch{position:relative;height:112px;border:1px solid var(--bd);border-radius:8px;background:#101315;overflow:hidden}
+.ch svg{display:block;width:100%;height:100%}
+.ch .t0{position:absolute;top:0;bottom:0;border-left:1px dashed var(--mag);width:0}
+.ch .t0 b{position:absolute;top:4px;left:4px;font-family:var(--mono);font-size:7.5px;color:var(--mag);white-space:nowrap;background:rgba(13,15,16,.85);padding:1px 3px;border-radius:3px}
+.ch .hid{position:absolute;top:0;bottom:0;right:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 5px,transparent 5px 10px);border-left:1px dashed var(--bd3);display:grid;place-items:center}
+.ch .hid span{font-family:var(--mono);font-size:7.5px;color:var(--tx3);transform:rotate(90deg);white-space:nowrap;letter-spacing:.1em}
+
+/* skill cards */
+.sk{border:1px solid var(--bd2);border-radius:9px;background:var(--surf2);padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:74px;justify-content:center;position:relative}
+.sk .gl{width:26px;height:26px;border:1px dashed var(--bd3);border-radius:6px;display:grid;place-items:center;font-size:12px;color:var(--tx2)}
+.sk .nm{font-family:var(--mono);font-size:8px;letter-spacing:.05em;text-transform:uppercase;color:var(--tx);text-align:center;line-height:1.2}
+.sk .cost{position:absolute;top:3px;right:4px;font-family:var(--mono);font-size:7px;color:var(--tx3)}
+.sk.on{border-color:var(--acid);background:rgba(200,241,53,.1)}
+.sk.on .nm{color:var(--acid)}
+.sk.lk{opacity:.4;border-style:dashed}
+.sk.rd{border-color:rgba(233,96,90,.5)}
+
+/* decisions 2x2 */
+.dec{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.dec .d{border:1px solid var(--bd2);border-radius:9px;background:var(--surf2);padding:8px;min-height:52px;display:flex;flex-direction:column;gap:2px;justify-content:center}
+.dec .d .k{font-family:var(--mono);font-size:8px;color:var(--tx3)}
+.dec .d .v{font-size:11px;font-weight:600;line-height:1.25}
+.dec .d.on{border-color:var(--acid);background:rgba(200,241,53,.11)}
+.dec .d.on .v{color:var(--acid)}
+
+/* score */
+.score{display:flex;align-items:center;gap:12px}
+.dial{width:76px;height:76px;flex:0 0 auto;border-radius:50%;border:2px solid var(--bd2);display:grid;place-items:center;position:relative;background:conic-gradient(var(--acid) 0 78%,var(--surf3) 78% 100%)}
+.dial i{position:absolute;inset:6px;border-radius:50%;background:var(--surf);display:grid;place-items:center;font-style:normal;font-family:var(--mono);font-size:19px;font-weight:700;color:var(--acid)}
+.dial i s{text-decoration:none;font-size:9px;color:var(--tx3)}
+.axes{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.ax{display:grid;grid-template-columns:64px 1fr 26px;gap:6px;align-items:center;font-family:var(--mono);font-size:8.5px;color:var(--tx2)}
+
+/* misc lists */
+.li{display:flex;gap:8px;align-items:center;border:1px solid var(--bd);border-radius:9px;background:var(--surf);padding:8px}
+.li .lead{width:30px;height:30px;flex:0 0 auto;border:1px dashed var(--bd2);border-radius:7px;display:grid;place-items:center;font-size:12px;color:var(--tx2)}
+.li .mid{flex:1;min-width:0}
+.li .mid .a{font-size:11.5px;font-weight:600;line-height:1.25}
+.li .mid .b{font-size:9.5px;color:var(--tx3);margin-top:1px}
+.li .end{flex:0 0 auto;text-align:right}
+.node{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
+.node .o{width:34px;height:34px;border-radius:50%;border:1px solid var(--bd2);display:grid;place-items:center;font-size:12px;color:var(--tx2);background:var(--surf2)}
+.node.done .o{border-color:var(--green);color:var(--green)}
+.node.cur .o{border-color:var(--acid);color:var(--acid);box-shadow:0 0 0 3px rgba(200,241,53,.12)}
+.node.lk .o{border-style:dashed;opacity:.5}
+.node .cap{font-family:var(--mono);font-size:7.5px;text-align:center;color:var(--tx3);line-height:1.2;max-width:62px}
+.link{height:1px;background:var(--bd2);flex:0 0 12px;margin-top:17px}
+.ent{border:1px solid var(--bd);border-radius:9px;background:var(--surf);overflow:hidden}
+.ent .art{height:66px;border-bottom:1px solid var(--bd);display:grid;place-items:center;font-family:var(--mono);font-size:8px;color:var(--tx3);background:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 6px,transparent 6px 12px);text-align:center;padding:4px}
+.ent .cap{padding:6px 7px}
+.ent .cap .a{font-size:10px;font-weight:600;line-height:1.2}
+.ent .cap .b{font-family:var(--mono);font-size:7.5px;color:var(--tx3);margin-top:2px}
+.ent.lock .art{color:var(--tx3);opacity:.6}
+
+/* annotation mode */
+.dev.anno [data-z]{outline:1px dashed rgba(87,210,230,.75);outline-offset:1px;position:relative}
+.dev.anno [data-z]:after{content:attr(data-z);position:absolute;top:-1px;left:-1px;background:var(--cyan);color:#04191D;font-family:var(--mono);font-size:8px;font-weight:700;padding:1px 3px;border-radius:0 0 4px 0;z-index:35;line-height:1.3;pointer-events:none}
+.dev.grid .scr:before{content:"";position:absolute;inset:0;z-index:30;pointer-events:none;
+ background:linear-gradient(90deg,rgba(87,210,230,.16) 0 1px,transparent 1px);background-size:24px 100%;
+ border-left:14px solid rgba(255,77,141,.09);border-right:14px solid rgba(255,77,141,.09)}
+
+/* ============ SPEC PANEL ============ */
+.spec{border-left:1px solid var(--bd);background:var(--panel);overflow-y:auto;padding:16px 16px 48px}
+.spec h4{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin:18px 0 8px;display:flex;align-items:center;gap:8px}
+.spec h4:first-child{margin-top:0}
+.spec h4 .ln{flex:1;height:1px;background:var(--bd)}
+.spec p{font-size:12.5px;color:var(--tx2);line-height:1.5}
+.zt{width:100%;border-collapse:collapse}
+.zt td{border-bottom:1px solid rgba(255,255,255,.07);padding:6px 4px;vertical-align:top;font-size:11.5px;line-height:1.4}
+.zt td:first-child{width:26px}
+.zt .zc{display:inline-grid;place-items:center;min-width:20px;height:18px;border-radius:4px;background:var(--cyan);color:#04191D;font-family:var(--mono);font-size:9px;font-weight:700;padding:0 3px}
+.zt .zn{color:var(--tx);font-weight:600}
+.zt .zg{font-family:var(--mono);font-size:9.5px;color:var(--tx3);display:block;margin-top:2px}
+.rules{display:flex;flex-direction:column;gap:7px}
+.rule{display:flex;gap:8px;font-size:11.5px;color:var(--tx2);line-height:1.45}
+.rule i{font-style:normal;color:var(--acid);flex:0 0 auto;font-family:var(--mono);font-size:10px;margin-top:2px}
+.rule.no i{color:var(--red)}
+.jump{display:flex;flex-wrap:wrap;gap:6px}
+.jump button{border:1px solid var(--bd);border-radius:7px;padding:6px 9px;font-size:11px;color:var(--tx2);min-height:32px}
+.jump button:hover{border-color:var(--cyan);color:var(--cyan)}
+.states{display:flex;flex-wrap:wrap;gap:6px}
+
+/* ============ OVERVIEW ============ */
+.ovw{padding:24px;overflow-y:auto;grid-column:1/-1}
+.stage>.ovw{align-self:stretch;width:100%;box-sizing:border-box}
+.main.ovwmode{grid-template-columns:286px minmax(0,1fr)}
+.ovw .gr{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:22px}
+.mini{cursor:pointer}
+.mini .box{width:196px;height:425px;overflow:hidden;border-radius:19px;border:1px solid var(--bd2);position:relative;background:#0D0F10}
+.mini .box .dev{transform:scale(.503);transform-origin:top left;box-shadow:none;border:0}
+.mini .cap{margin-top:7px;font-size:11.5px;line-height:1.3}
+.mini .cap em{font-family:var(--mono);font-size:9.5px;color:var(--acid);font-style:normal;display:block}
+.mini:hover .box{border-color:var(--acid)}
+.ovh{display:flex;align-items:baseline;gap:12px;margin:26px 0 14px}
+.ovh b{font-size:13px;letter-spacing:.1em;text-transform:uppercase}
+.ovh .ln{flex:1;height:1px;background:var(--bd)}
+.ovh span{font-family:var(--mono);font-size:10px;color:var(--tx3)}
+
+@media (max-width:1280px){.main{grid-template-columns:240px minmax(0,1fr) 300px}}
+@media (max-width:1060px){
+ .main{grid-template-columns:1fr;overflow-y:auto}
+ .nav{border-right:0;border-bottom:1px solid var(--bd);max-height:none;overflow:visible}
+ .stage{padding:18px 16px}
+ .spec{border-left:0;border-top:1px solid var(--bd)}
+ .shell{height:auto;overflow:visible}
+ body{overflow-y:auto}
+}
+@media (max-width:430px){
+ .dev{transform:scale(.86);transform-origin:top center;margin-bottom:-118px}
+ .appbar{height:auto;flex-wrap:wrap;padding:10px 14px;gap:10px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="appbar">
+    <div class="brand"><b>Signal Arena</b><span>UX-ПРОТОТИП · v0.9 · КАРТА ЭКРАНОВ</span></div>
+    <div class="spacer"></div>
+    <div class="tgl">
+      <button id="tAnno" aria-pressed="true">Аннотации</button>
+      <button id="tGrid" aria-pressed="false">Сетка 24px</button>
+      <button id="tOvw" aria-pressed="false">Все экраны</button>
+    </div>
+    <span class="counter" id="cnt">—</span>
+  </header>
+  <div class="main" id="main">
+    <nav class="nav" id="nav"></nav>
+    <div class="stage" id="stage"></div>
+    <aside class="spec" id="spec"></aside>
+  </div>
+</div>
+<script>
+/* ===================== SIGNAL ARENA · PROTOTYPE ENGINE ===================== */
+const H = (s) => s;
+
+/* ---------- candle chart (deterministic pseudo-random) ---------- */
+function candles(seed, n, hidePct) {
+  let s = seed;
+  const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  let p = 50, out = [];
+  for (let i = 0; i < n; i++) {
+    const d = (rnd() - 0.46) * 9;
+    const o = p, c = Math.max(8, Math.min(92, p + d));
+    const hi = Math.max(o, c) + rnd() * 5, lo = Math.min(o, c) - rnd() * 5;
+    out.push([o, c, hi, lo]); p = c;
+  }
+  const w = 100 / n;
+  const body = out.map((k, i) => {
+    const x = i * w + w * .5, up = k[1] >= k[0];
+    const col = up ? '#5FCB8B' : '#E9605A';
+    const y1 = 100 - k[2], y2 = 100 - k[3];
+    const by = 100 - Math.max(k[0], k[1]), bh = Math.max(1.4, Math.abs(k[1] - k[0]));
+    return '<line x1="' + x + '" x2="' + x + '" y1="' + y1 + '" y2="' + y2 + '" stroke="' + col + '" stroke-width="' + (w * .12) + '" vector-effect="non-scaling-stroke"/>' +
+      '<rect x="' + (i * w + w * .2) + '" y="' + by + '" width="' + (w * .6) + '" height="' + bh + '" fill="' + col + '" opacity="' + (up ? .85 : .8) + '"/>';
+  }).join('');
+  const grid = [20, 40, 60, 80].map(y => '<line x1="0" x2="100" y1="' + y + '" y2="' + y + '" stroke="rgba(255,255,255,.055)" stroke-width=".4"/>').join('');
+  return '<svg viewBox="0 0 100 100" preserveAspectRatio="none">' + grid + body + '</svg>';
+}
+function chart(o) {
+  o = o || {};
+  const hide = o.hide === undefined ? 34 : o.hide;
+  const t0 = o.t0 === undefined ? 66 : o.t0;
+  return '<div class="ch"' + (o.z ? ' data-z="' + o.z + '"' : '') + ' style="height:' + (o.h || 112) + 'px">' +
+    candles(o.seed || 7, o.n || 28) +
+    (t0 !== null ? '<div class="t0" style="left:' + t0 + '%"><b>' + (o.t0label || 't₀ · ТОЧКА РЕШЕНИЯ') + '</b></div>' : '') +
+    (hide > 0 ? '<div class="hid" style="width:' + hide + '%"><span>БУДУЩЕЕ СКРЫТО</span></div>' : '') +
+    '</div>';
+}
+
+/* ---------- shared chrome ---------- */
+function sbar() { return '<div class="sbar"><span>9:41</span><span>●●● ▾ ■</span></div>'; }
+
+function topbar(o) {
+  o = o || {};
+  return '<div class="tb" data-z="' + (o.z || '1') + '">' +
+    '<div class="ava">☠</div>' +
+    '<div class="xpwrap"><div class="r"><span>LVL 42 · XP</span><span>12 450 / 18 000</span></div><div class="bar"><i style="width:69%"></i></div></div>' +
+    '<span class="chip">◉ 2 345</span>' +
+    (o.sig === false ? '' : '<span class="chip">$SIG 128</span>') +
+    '<div class="ico">⚑<b></b></div><div class="ico">⚙</div></div>';
+}
+
+function taskbar(o) {
+  o = o || {};
+  return '<div class="tb" data-z="' + (o.z || '1') + '">' +
+    '<div class="ico">‹</div>' +
+    '<div class="xpwrap"><div class="r"><span>' + (o.label || 'СЦЕНАРИЙ 14/40') + '</span><span>' + (o.right || 'ПРАВИЛО · СНАЧАЛА РИСК') + '</span></div><div class="bar c"><i style="width:' + (o.pct || 35) + '%"></i></div></div>' +
+    '<span class="chip">◉ 2 345</span>' +
+    '<div class="ico">?</div><div class="ico">⚙</div></div>';
+}
+
+const NAVITEMS = [['⌂', 'ГЛАВНАЯ', '2.1'], ['☉', 'ОБУЧЕНИЕ', '4.1'], ['▷', 'ПРАКТИКА', '3.1'], ['⚠', 'УГРОЗЫ', '5.1'], ['⋯', 'ЕЩЁ', '11.1']];
+function bnav(active, z) {
+  return '<div class="bn"' + (z ? ' data-z="' + z + '"' : ' data-z="N"') + '>' + NAVITEMS.map((it, i) =>
+    '<a href="#' + it[2] + '" class="' + (it[1] === active ? 'on ' : '') + '' + '"><i>' + it[0] + '</i>' + it[1] + '</a>'
+  ).join('') + '</div>';
+}
+
+function sec(t, right) {
+  return '<div class="sec"><span class="lbl">' + t + '</span><span class="ln"></span>' + (right ? '<span class="lbl">' + right + '</span>' : '') + '</div>';
+}
+function skill(n, sub, st, cost) {
+  return '<div class="sk ' + (st || '') + '">' + (cost ? '<span class="cost">' + cost + '</span>' : '') +
+    '<span class="gl">' + (st === 'lk' ? '⚿' : '◈') + '</span><span class="nm">' + n + '</span>' +
+    (sub ? '<span class="t3" style="font-size:7.5px">' + sub + '</span>' : '') + '</div>';
+}
+function decisions(sel, opts, z) {
+  const o = opts || ['Войти на пробое', 'Ждать ретест', 'Сократить риск', 'Остаться вне рынка'];
+  return '<div class="dec"' + (z ? ' data-z="' + z + '"' : '') + '>' + o.map((v, i) =>
+    '<div class="d' + (sel === i ? ' on' : '') + '"><span class="k">' + 'ABCD'[i] + '</span><span class="v">' + v + '</span></div>'
+  ).join('') + '</div>';
+}
+function browser(o) {
+  o = o || {};
+  const tabs = o.tabs || [['ГРАФИК', 'on'], ['ОБЪЁМ', ''], ['НОВОСТИ', ''], ['СОЦФОН', ''], ['+', 'lk']];
+  return '<div class="bw"' + (o.z ? ' data-z="' + o.z + '"' : '') + '>' +
+    '<div class="chr"><span class="dots"><i></i><i></i><i></i></span><div class="tabs">' +
+    tabs.map(t => '<span class="tab ' + t[1] + '">' + t[0] + '</span>').join('') + '</div></div>' +
+    '<div class="url"><span>' + (o.url || 'arena://btc-perp/15m') + '</span><span>' + (o.meta || 'АРХИВ') + '</span></div>' +
+    '<div class="view">' + (o.view || chart({})) + '</div></div>';
+}
+
+/* ---------- generic screen wrapper ---------- */
+function screen(inner, nav, cls) {
+  return '<div class="scr' + (cls ? ' ' + cls : '') + '">' + sbar() + '<div class="body">' + inner + '</div>' + (nav === null ? '' : bnav(nav)) + '</div>';
+}
+
+/* ===================== SCREENS ===================== */
+const S = [];
+function add(o) { S.push(o); }
+
+/* ---------------- 0. ВХОД ---------------- */
+add({
+  id: '1.1', grp: '0 · ВХОД И КАЛИБРОВКА', title: 'Загрузочный экран',
+  desc: 'Первый кадр. Задаёт тон и сразу снимает ожидание «заработка».',
+  render: () => '<div class="scr">' + sbar() + '<div class="body" style="justify-content:center;gap:18px;padding:0 26px 40px">' +
+    '<div class="ph" style="height:120px" data-z="1">ЛОГОТИП · ЗНАК<br>240×120</div>' +
+    '<div style="text-align:center" data-z="2"><div class="big" style="font-size:26px;letter-spacing:.06em">SIGNAL ARENA</div>' +
+    '<div class="lbl" style="margin-top:6px">ТРЕНАЖЁР РЕШЕНИЙ · НЕ БИРЖА</div></div>' +
+    '<div class="card q" data-z="3"><div class="t" style="text-align:center">Загрузка архива рыночных катастроф…</div><div class="bar" style="margin-top:8px"><i style="width:62%"></i></div>' +
+    '<div class="t3" style="text-align:center;margin-top:7px">Датасет v2.4 · хэш проверен</div></div>' +
+    '<div style="flex:1"></div>' +
+    '<div class="t3" style="text-align:center" data-z="4">Игра не даёт торговых сигналов и не обещает дохода.<br>Внутригровые ресурсы не выводятся.</div>' +
+    '</div></div>',
+  zones: [['1', 'Лого-блок', 'center, y 180–300, ш 240'], ['2', 'Вордмарк + теглайн', 'center, y 318–370'], ['3', 'Индикатор загрузки + версия датасета', 'x 26, ш 338, h 72'], ['4', 'Правовой дисклеймер (постоянный)', 'bottom, y 772–820']],
+  rules: [['§2', 'Никаких цитат про прибыль, графиков «вверх» и символов биржи'], ['§15', 'Версия датасета видна с первого кадра — честность по умолчанию']],
+  states: ['Загрузка', 'Ошибка сети', 'Обновление датасета'], jumps: ['1.2']
+});
+
+add({
+  id: '1.2', grp: '0 · ВХОД И КАЛИБРОВКА', title: 'Вход / регистрация',
+  desc: 'Один экран, без разветвления. Гостевой вход доступен до первого сценария.',
+  render: () => '<div class="scr">' + sbar() + '<div class="body" style="padding:24px 22px 30px;gap:12px">' +
+    '<div class="lbl" data-z="1">ШАГ 1 ИЗ 3 · ДОСТУП</div>' +
+    '<div class="big" data-z="2">ВХОД БЕСПЛАТНЫЙ</div><div class="t" style="margin-top:-4px">Выход обычно дороже. Но здесь он тоже бесплатный.</div>' +
+    '<div class="col" style="margin-top:8px" data-z="3">' +
+    '<div class="btn"> Продолжить с Apple</div><div class="btn">G Продолжить с Google</div>' +
+    '<div class="btn gho">✉ Email</div></div>' +
+    '<div class="row" style="align-items:center;gap:10px;margin:4px 0"><span class="ln" style="flex:1;height:1px;background:var(--bd)"></span><span class="lbl">ИЛИ</span><span class="ln" style="flex:1;height:1px;background:var(--bd)"></span></div>' +
+    '<div class="btn gho" data-z="4">Играть без аккаунта · 3 сценария</div>' +
+    '<div style="flex:1"></div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Продолжая, вы соглашаетесь с тем, что игра — обучающий тренажёр на исторических данных, а не инвестиционная рекомендация. Условия · Конфиденциальность</div></div>' +
+    '</div></div>',
+  zones: [['1', 'Индикатор шага воронки', 'x 22, y 46'], ['2', 'Заголовок + подзаголовок', 'x 22, ш 346'], ['3', 'Стек кнопок провайдеров', '3×40, gap 8'], ['4', 'Гостевой вход (лимит 3)', 'ш 346, h 40'], ['5', 'Правовой блок + ссылки', 'bottom, ш 346']],
+  rules: [['§2', 'Нет привязки кошелька — вне MVP (§17)'], ['§13', 'Нет пейволла на входе']],
+  states: ['Новый', 'Возврат', 'Гость → апгрейд'], jumps: ['1.3', '1.1']
+});
+
+add({
+  id: '1.3', grp: '0 · ВХОД И КАЛИБРОВКА', title: 'Калибровка опыта',
+  desc: 'Не тест и не урок. Решает, с какой плотности стартует контент и насколько сжат онбординг.',
+  render: () => '<div class="scr">' + sbar() + '<div class="body" style="padding:18px 18px 26px;gap:10px">' +
+    '<div class="row" style="align-items:center" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>ШАГ 2 ИЗ 3</span><span>КАЛИБРОВКА</span></div><div class="bar c"><i style="width:66%"></i></div></div></div>' +
+    '<div class="big" data-z="2">СКОЛЬКО РАЗ ТЕБЯ УЖЕ ЛИКВИДИРОВАЛИ?</div>' +
+    '<div class="t">От ответа не зависит ни оценка, ни доступ. Зависит только длина объяснений.</div>' +
+    '<div class="col" style="margin-top:4px" data-z="3">' +
+    ['Ни раза. Я тут первый день', 'Пару раз. Запомнилось', 'Регулярно. Ищу систему', 'Торгую профессионально']
+      .map((v, i) => '<div class="btn' + (i === 2 ? ' pri' : ' gho') + '" style="justify-content:space-between"><span>' + v + '</span><span class="lbl" style="color:inherit;opacity:.6">L' + [0, 5, 18, 34][i] + '</span></div>').join('') + '</div>' +
+    sec('ЧТО ТРЕНИРУЕШЬ В ПЕРВУЮ ОЧЕРЕДЬ', 'МАКС 2') +
+    '<div class="g2" data-z="4">' + [['Входы', 'on'], ['Удержание', ''], ['Риск', 'on'], ['��сихология', ''], ['Шум и новости', ''], ['Web3-риски', '']]
+      .map(v => '<div class="btn sm' + (v[1] ? ' pri' : ' gho') + '">' + v[0] + '</div>').join('') + '</div>' +
+    '<div style="flex:1"></div>' +
+    '<div class="row" data-z="5"><div class="btn gho" style="flex:1">Пропустить</div><div class="btn pri" style="flex:2">Дальше</div></div>' +
+    '</div></div>',
+  zones: [['1', 'Шаг + кнопка назад', 'y 40, h 32'], ['2', 'Вопрос (2 строки макс)', 'x 18, ш 354'], ['3', '4 варианта с меткой старт-уровня', 'h 40 каждый'], ['4', 'Цели тренировки (мультивыбор, до 2)', 'сетка 2×3'], ['5', 'Нижняя панель действий', 'sticky bottom, h 40']],
+  rules: [['§3.1', 'Онбординг обязателен для всех, но объяснения пропускаемые'], ['§16.8', 'Профессионал не должен проходить курс про свечи']],
+  states: ['Пусто', 'Выбрано', 'Лимит 2 достигнут'], jumps: ['2.1', '1.2']
+});
+
+/* ---------------- 1. ОНБОРДИНГ (прогрессивное раскрытие, §11) ---------------- */
+const OB = [
+  ['2.1', 'Шаг 1 · только текст ситуации', 'На экране живёт один элемент. Игрок усваивает: задание начинается с контекста, а не с графика.', 1],
+  ['2.2', 'Шаг 2 · + вкладка графика', 'Появляется браузер с одной вкладкой и меткой t₀. Будущее сразу показано как скрытое.', 2],
+  ['2.3', 'Шаг 3 · + второй источник', 'Вторая вкладка учит главному: источники могут противоречить друг другу.', 3],
+  ['2.4', 'Шаг 4 · + первая карта навыка', 'Карта — не бонус и не подсказка ответа. Это принцип, который можно приложить к данным.', 4],
+  ['2.5', 'Шаг 5 · + четыре решения', 'Кнопки встают на своё постоянное место — и больше никогда не переезжают.', 5],
+  ['2.6', 'Шаг 6 · + разбор и оценка', 'Первое знакомство с главным правилом: исход рынка ≠ качество решения.', 6],
+  ['2.7', 'Шаг 7 · + дополнительный шаг', 'Контекстная нижняя панель. Показывается один раз и с объяснением, почему она не всегда.', 7],
+  ['2.8', 'Шаг 8 · + угрозы', 'Первая угроза названа и показана открыто — только на ранних уровнях.', 8],
+  ['2.9', 'Шаг 9 · + правило решения', 'Правило задаёт критерий оценки сессии и становится частью топ-бара.', 9],
+  ['2.10', 'Шаг 10 · полный каркас', 'Все категории вкладок раскрыты. Дальше меняется не каркас, а плотность задач.', 10]
+];
+const ALLTABS = [['ГРАФИК', 'on'], ['СТАРШИЙ TF', ''], ['ОБЪЁМ', ''], ['НОВОСТИ', ''], ['СОЦФОН', ''], ['МАКРО', ''], ['ON-CHAIN', ''], ['ПОЗИЦИЯ', ''], ['МОИ ПРАВИЛА', '']];
+
+OB.forEach(([id, title, desc, lv]) => {
+  add({
+    id, grp: '1 · ОНБОРДИНГ · МЕХАНИКА', title, desc,
+    render: () => {
+      const tabs = lv < 2 ? null : (lv === 2 ? [['ГРАФИК', 'on']] : lv < 10 ? [['ГРАФИК', 'on'], ['ОБЪЁМ', ''], ['+', 'lk']] : ALLTABS);
+      let x = '<div class="tb" data-z="1"><div class="ico">✕</div><div class="xpwrap"><div class="r"><span>ОНБОРДИНГ ' + lv + '/10</span><span>' + (lv >= 9 ? 'ПРАВИЛО · ТОЛЬКО ДОКАЗАТЕЛЬСТВА' : 'БЕЗ ОЦЕНКИ') + '</span></div><div class="bar c"><i style="width:' + lv * 10 + '%"></i></div></div><div class="ico">?</div></div>';
+      x += '<div class="card q" data-z="2"><div class="h">ПРОБОЙ ЕСТЬ. ОБЪЁМА НЕТ.</div><div class="t" style="margin-top:3px">Цель: понять, что из этого следует. Рынок уже поблагодарил тебя за ликвидность.</div></div>';
+      if (lv >= 8) x += '<div class="card" data-z="6" style="border-color:rgba(255,77,141,.4)"><div class="row" style="align-items:center"><div class="ph" style="width:38px;height:38px;flex:0 0 auto">АРТ</div><div style="flex:1"><div class="h2">FAKE BREAKOUT PHANTOM</div><div class="t3">Активная угроза · уровень 35</div></div><span class="tag mg">УГРОЗА</span></div></div>';
+      if (tabs) x += browser({ z: '3', tabs, view: chart({ seed: 11, hide: lv >= 6 ? 0 : 34 }) + (lv >= 3 ? '<div class="card dash" style="margin-top:7px"><div class="lbl">ВКЛАДКА ОБЪЁМ · КРАТКИЙ СЛЕПОК</div><div class="t" style="margin-top:3px">Объём на пробое − 41% к среднему</div></div>' : '') });
+      else x += '<div class="ph" style="height:150px" data-z="3">ЗОНА БРАУЗЕРА<br>ЗАРЕЗЕРВИРОВАНА, НО ПУСТА</div>';
+      if (lv >= 4) {
+        x += sec('КАРТЫ НАВЫКОВ', lv >= 10 ? '4 ДОСТУПНО' : '1 ДОСТУПНА');
+        x += '<div class="g4" data-z="4">' + skill('ОБЪЁМ', 'чтение', 'on') +
+          skill('СТАРШИЙ TF', 'чтение', lv >= 10 ? '' : 'lk') +
+          skill('ЖДАТЬ', 'решение', lv >= 10 ? '' : 'lk') +
+          skill('ЛИМИТ РИСКА', 'защита', lv >= 10 ? '' : 'lk') + '</div>';
+      }
+      if (lv >= 5) { x += sec('ОСНОВНОЕ РЕШЕНИЕ', 'ВСЕГДА 4'); x += decisions(lv >= 6 ? 1 : null, null, '5'); }
+      if (lv === 7) x += '<div class="card" data-z="7" style="border-color:rgba(87,210,230,.45)"><div class="lbl" style="color:var(--cyan)">ДОПОЛНИТЕЛЬНЫЙ ШАГ · УСЛОВИЕ ОТМЕНЫ</div><div class="g2" style="margin-top:7px"><div class="btn sm gho">Закрытие под уровнем</div><div class="btn sm pri">Нет объёма на ретесте</div><div class="btn sm gho">Время вышло</div><div class="btn sm gho">Отмены нет</div></div></div>';
+      if (lv >= 6) x += '<div class="card" data-z="8"><div class="row" style="justify-content:space-between"><span class="lbl">РАЗБОР</span><span class="tag ac">КАЧЕСТВО 78</span></div><div class="t" style="margin-top:6px">Факт: цена вернулась под уровень. Логика: пробой без объёма — приглашение. Приглашают не тебя.</div></div>';
+      x += '<div style="flex:1;min-height:6px"></div>';
+      x += '<div class="card q" data-z="9"><div class="row" style="align-items:center;gap:9px"><span class="tag cy">ПОДСКАЗКА ' + lv + '/10</span><div class="t" style="flex:1">' +
+        ['Сначала читаешь ситуацию. Потом всё остальное.', 'График обрезан на t₀. Будущее зафиксирова��о заранее.', 'Второй источник может спорить с первым.', 'Карта не даёт ответ. Она даёт вопрос.', 'Четыре варианта. Не входить — тоже решение.', 'Убыток может получить 100. Прибыль может получить 20.', 'Дополнительный шаг бывает не всегда. Это норма.', 'Угрозы — давление, а не враги с HP.', 'Правило говорит, за что тебя оценят.', 'Каркас открыт полностью. Дальше будет только тише и сложнее.'][lv - 1] +
+        '</div></div><div class="row" style="margin-top:8px"><div class="btn sm gho" style="flex:1">Пропустить объяснения</div><div class="btn sm pri" style="flex:1">' + (lv === 10 ? 'В Практику' : 'Дальше') + '</div></div></div>';
+      return '<div class="scr">' + sbar() + '<div class="body">' + x + '</div></div>';
+    },
+    zones: [['1', 'Топ-бар онбординга: выход, прогресс шагов, помощь', 'y 40, h 40, ш 362'],
+    ['2', 'Текст задания: заголовок + цель (макс 3 строки)', 'x 14, ш 362, h auto'],
+    ['3', 'Браузерный виджет (chrome 38 + url 22 + view)', 'ш 362, h 170–260'],
+    ['4', 'Ряд карт навыков — ровно 4 слота', '4×86×74, gap 7'],
+    ['5', 'Блок решений 2×2 — фиксированное место', '2×2, клетка 177×52'],
+    ['6', 'Карточка активной угрозы (только L≤шаг 8)', 'ш 362, h 58'],
+    ['7', 'Контекстная нижняя панель (доп. шаг)', 'ш 362, h 96'],
+    ['8', 'Блок разбора и оценки', 'ш 362, h auto'],
+    ['9', 'Коуч-плашка онбординга + «Strong Skip»', 'sticky bottom, h 88']],
+    rules: [['§11', 'После онбординга каркас одинаков на всех уровнях 0–99'],
+    ['§5', 'Позиции элементов не меняются — меняется только видимость'],
+    ['§3.1', 'Без оценки и без штрафов до шага 6'],
+    ['NO', 'Запрещено учить теории трейдинга в онбординге — это Обучение']],
+    states: ['Активный шаг', 'Объяснения скрыты', 'Шаг пропущен'],
+    jumps: (lv < 10 ? [OB[lv][0]] : ['3.1']).concat(lv > 1 ? [OB[lv - 2][0]] : ['1.3'])
+  });
+});
+
+/* ---------------- 3. ПРАКТИКА ---------------- */
+const TABS_FULL = [['▤', 'ГРАФИК', 'on'], ['≣', 'СТАРШИЙ TF', ''], ['░', 'ОБЪЁМ', ''], ['⚑', 'НОВОСТИ', ''], ['◍', 'СОЦФОН', ''], ['⊞', 'МАКРО', 'lk'], ['⛓', 'ON-CHAIN', 'lk']];
+
+add({
+  id: '4.1', grp: '3 · ПРАКТИКА · ОСНОВНОЙ ЦИКЛ', title: 'Практика · выбор режима',
+  desc: 'Вход в режим. Здесь игрок выбирает тип тренировки и правило сессии — до того, как увидит данные.',
+  render: () => screen(
+    topbar() +
+    '<div class="card q" data-z="2"><div class="lbl">ПРАКТИКА · УРОВЕНЬ 42</div><div class="h" style="margin-top:4px">РЫНОК УЖЕ СЛУЧИЛСЯ.<br>ОСТАЛОСЬ ТОЛЬКО ТВОЁ РЕШЕНИЕ.</div></div>' +
+    sec('ФОРМАТ') +
+    '<div class="col" data-z="3">' + [
+      ['Свободная тренировка', '1 сценарий · 60–90 сек · подбор по слабым местам', 'pri'],
+      ['Серия из 3', 'Одна тема, растущая сложность · 8–12 мин', 'gho'],
+      ['Исправление', 'Целевая работа по повторяющейся ошибке · 2/3', 'gho']]
+      .map(v => '<div class="card" style="padding:10px"><div class="row" style="justify-content:space-between;align-items:center"><div><div class="h2">' + v[0] + '</div><div class="t3" style="margin-top:2px">' + v[1] + '</div></div><div class="btn sm ' + v[2] + '">Выбрать</div></div></div>').join('') + '</div>' +
+    sec('ПРАВИЛО СЕССИИ', 'ВЛИЯЕТ НА ОЦЕНКУ') +
+    '<div class="row w" data-z="4">' + [['СНАЧАЛА РИСК', 'cy'], ['ТОЛЬКО ДОКАЗАТЕЛЬСТВА', ''], ['ШУМОВОЙ КАРАНТИН', ''], ['НЕ ВХОДИТЬ — ТОЖЕ РЕШЕНИЕ', ''], ['СОХРАНИТЬ СИСТЕМУ', ''], ['ПОСЛЕ УБЫТКА', ''], ['ПРОВЕРКА УВЕРЕННОСТ��', '']]
+      .map(v => '<span class="tag ' + v[1] + '">' + v[0] + '</span>').join('') + '</div>' +
+    sec('ФОКУС КОНТЕНТА') +
+    '<div class="g3" data-z="5">' + ['ВСЕ', 'СТРУКТУРА', 'ШУМ', 'РИСК', 'ПСИХО', 'WEB3'].map((v, i) => '<div class="btn sm ' + (i === 0 ? 'pri' : 'gho') + '">' + v + '</div>').join('') + '</div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="card" data-z="6"><div class="row" style="justify-content:space-between"><span class="t3">Датасет v2.4 · 40 ситуаций · будущее зафиксировано</span><span class="tag gr">ХЭШ ✓</span></div>' +
+    '<div class="btn pri" style="margin-top:9px">Начать →</div></div>', 'ПРАКТИКА'),
+  zones: [['1', 'Топ-бар', 'sticky, h 42'], ['2', 'Заголовочный блок режима', 'ш 362, h 76'], ['3', 'Форматы тренировки (3 карточки)', 'h 58 каждая'], ['4', 'Выбор правила — 7 чипсов, один активен', 'wrap, h 24'], ['5', 'Фокус контента 3×2', 'клетка 116×32'], ['6', 'Подвал: версия датасета + старт', 'sticky, h 88']],
+  rules: [['§9', 'Правило выбирается ДО показа данных, иначе это подгонка критерия'], ['§15', 'Хэш скрытого продолжения показан до старта'], ['§13', 'Нельзя купить «лёгкие» сценарии или буст оценки']],
+  states: ['Свободная', 'Серия', 'Исправление', 'Нет новых сценариев'], jumps: ['4.2', '3.1']
+});
+
+add({
+  id: '4.2', grp: '3 · ПРАКТИКА · ОСНОВНОЙ ЦИКЛ', title: 'Брифинг задания',
+  desc: 'Короткий экран-шлюз: что будет оцениваться и что скрыто. Обязателен для честности по §15.',
+  render: () => screen(
+    taskbar({ label: 'БРИФИНГ', right: 'СЦЕНАРИЙ 14/40', pct: 0 }) +
+    '<div class="card q" data-z="2"><div class="lbl">СИТУАЦИЯ · ИСТОРИЧЕСКАЯ</div><div class="h" style="margin-top:5px">РЫНОК СЛОМАЛ УРОВЕНЬ.<br>ОБЪЁМ ОТКАЗАЛСЯ КОММЕНТИРОВАТЬ.</div>' +
+    '<div class="t" style="margin-top:7px">Ты вне позиции. Решение нужно принять в точке t₀.</div></div>' +
+    '<div class="g2" data-z="3">' + [['ФАЗА', 'До входа'], ['ТАЙМФРЕЙМ', '15m'], ['ПРАВИЛО', 'Сначала риск'], ['СЛОЖНОСТЬ', '◉◉◉○○']].map(v => kv(v[0], v[1])).join('') + '</div>' +
+    sec('ЧТО ОЦЕНИВАЕТСЯ', '0–100') +
+    '<div class="col" data-z="4">' + [['Учёт контекста', 25], ['Работа с доказательствами', 20], ['Выбор действия', 20], ['Управление риском', 20], ['Дисциплина', 15]]
+      .map(v => '<div class="row" style="align-items:center;gap:9px"><span class="t" style="flex:1">' + v[0] + '</span><span class="bar" style="width:90px"><i style="width:' + v[1] * 4 + '%"></i></span><span class="lbl" style="width:26px;text-align:right">' + v[1] + '</span></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="5"><div class="lbl" style="color:var(--amber)">СКРЫТО ДО ОТВЕТА</div><div class="t3" style="margin-top:5px">Точная дата · инструмент · оригинальные заголовки · уникальные цифры · ссылки на источники</div></div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="row" data-z="6"><div class="btn gho" style="flex:1">Назад</div><div class="btn pri" style="flex:2">К решению</div></div>', null),
+  zones: [['1', 'Сервисный топ-бар задания (выход, прогресс, помощь)', 'y 40, h 40'], ['2', 'Текст ситуации', 'ш 362, h auto'], ['3', 'Мета-сетка 2×2', 'клетка 177×46'], ['4', 'Веса критериев оценки', '5 строк × 18'], ['5', 'Список скрытых идентификаторов', 'ш 362, h 60'], ['6', 'Действия', 'sticky, h 40']],
+  rules: [['§15', 'Игрок видит критерии ДО решения — оценка не сюрприз'], ['§15', 'Поисковые идентификаторы скрыты до завершения']],
+  states: ['Обычный', 'С активной fix-миссией', 'Турнирный (таймер скрыт)'], jumps: ['4.3', '4.1']
+});
+
+/* ЯДРО: экран задания — единый каркас (§5) */
+function taskScreen(o) {
+  o = o || {};
+  return screen(
+    taskbar({ z: '1', label: o.phase || 'ДО ВХОДА · t₀', right: o.right || 'СНАЧАЛА РИСК', pct: o.pct == null ? 35 : o.pct }) +
+    '<div class="card q" data-z="2"><div class="h">' + (o.head || 'ПРОБОЙ ЕСТЬ. ОБЪЁМА НЕТ.') + '</div>' +
+    '<div class="t" style="margin-top:3px">' + (o.sub || 'Цена вышла за границу диапазона. Участники считают это приглашением.') + '</div></div>' +
+    (o.entity === false ? '' : '<div class="row" data-z="3" style="gap:7px">' +
+      '<span class="tag mg">◉ FAKE BREAKOUT PHANTOM</span>' + (o.entity2 ? '<span class="tag vi">◉ FOMO WRAITH</span>' : '<span class="tag">ДАВЛЕНИЕ 35</span>') + '</div>') +
+    browser(Object.assign({ z: '4', tabs: TABS_FULL, url: 'arena://situation-1147/15m', meta: 'АРХИВ · t₀ ЗАФИКСИРОВАН', view: chart({ seed: 7, hide: 34, t0: 1 }) }, o.browser || {})) +
+    sec('КАРТЫ НАВЫКОВ', o.cardsRight || 'ПРИМЕНЕНО 1 ИЗ 2') +
+    '<div class="g4" data-z="5">' + (o.cards || (skill('СНАЧАЛА РИСК', 'защита', 'on') + skill('НЕТ ОБЪЁМА — НЕТ СДЕЛКИ', 'решение', '') + skill('СТАРШИЙ TF', 'чтение', '') + skill('НЕ УСРЕДНЯЙ', 'защита', 'lk', 120))) + '</div>' +
+    sec('ОСНОВНОЕ РЕШЕНИЕ', 'ВСЕГДА 4 · ПОСТОЯННОЕ МЕСТО') +
+    decisions(o.sel == null ? null : o.sel, o.opts, '6') +
+    (o.step2 || '') +
+    '<div class="card dash" data-z="8"><div class="t3">НЕ ФИНРЕКОМЕНДАЦИЯ · ИСТОРИЧЕСКИЕ ДАННЫЕ · ИСХОД УЖЕ ЗАФИКСИРОВАН</div></div>',
+    null, o.cls);
+}
+const TASKZONES = [['1', 'Топ-бар задания: выход · фаза+прогресс · правило · помощь', 'y 40, h 40, ш 362'],
+['2', 'Текст ситуации: заголовок ≤ 2 строк + пояснение ≤ 2 строк', 'ш 362, h 78'],
+['3', 'Строка активных угроз (1–2 чипса)', 'h 20'],
+['4', 'Браузерный виджет: точки 12 · вкладки-иконки · URL-строка 22 · область данных 118–190', 'ш 362, h 196'],
+['5', 'Ряд карт навыков: ровно 4 слота 86×74, арт только в центре', 'gap 7'],
+['6', 'Блок решений: сетка 2×2, клетка 177×52, буквенные метки A–D', 'никогда не меняет позицию'],
+['7', 'Контекстная нижняя панель — только если есть второй шаг', 'ш 362, h 96'],
+['8', 'Постоянная правовая плашка', 'h 34']];
+const TASKRULES = [['§5', 'Каркас идентичен на всех уровнях 0–99 — меняется только плотность содержания'],
+['§4', 'Ровно 4 варианта решения, всегда в одном месте'],
+['§6', 'Если информация не может изменить один из 4 вариантов — её нет на экране'],
+['§6', 'Вкладок не больше 7; на старте 1–2'],
+['§8', 'Будущее скрыто до фиксации ответа; t₀ показан явно'],
+['NO', 'Запрещено: поля цены/объёма/плеча/SL/TP — это превратит экран в терминал'],
+['NO', 'Запрещено: виртуальный PnL и баланс в любой части экрана']];
+
+add({
+  id: '4.3', grp: '3 · ПРАКТИКА · ОСНОВНОЙ ЦИКЛ', title: 'Задание · базовое состояние',
+  desc: 'Главный экран игры. Ни один элемент не меняет позицию между уровнями и сценариями.',
+  render: () => taskScreen({}), zones: TASKZONES, rules: TASKRULES,
+  states: ['Ничего не выбрано', 'Карта применена', 'Вариант выбран', 'Ответ зафиксирован'], jumps: ['4.4', '4.6', '4.7', '4.14']
+});
+
+add({
+  id: '4.4', grp: '3 · ПРАКТИКА · ИСТОЧНИКИ', title: 'Вкладка объёма / ликвидности',
+  desc: 'Переключение вкладки не сдвигает остальные зоны: меняется только внутренность виджета.',
+  render: () => taskScreen({
+    browser: {
+      tabs: TABS_FULL.map((t, i) => [t[0], t[1], i === 2 ? 'on' : (t[2] === 'lk' ? 'lk' : '')]),
+      url: 'arena://situation-1147/liquidity',
+      view: '<div class="g2" style="gap:7px"><div><div class="lbl" style="color:var(--red)">ASKS</div>' +
+        [['—', 82], ['—', 64], ['—', 41], ['—', 28]].map(v => '<div class="row" style="align-items:center;gap:6px;margin-top:3px"><span class="bar rd" style="flex:1"><i style="width:' + v[1] + '%"></i></span></div>').join('') + '</div>' +
+        '<div><div class="lbl" style="color:var(--green)">BIDS</div>' +
+        [['—', 18], ['—', 24], ['—', 31], ['—', 22]].map(v => '<div class="row" style="align-items:center;gap:6px;margin-top:3px"><span class="bar gr" style="flex:1"><i style="width:' + v[1] + '%"></i></span></div>').join('') + '</div></div>' +
+        '<div class="card" style="margin-top:8px;border-color:rgba(169,139,232,.45)"><div class="row" style="justify-content:space-between"><span class="lbl" style="color:var(--violet)">КИТОВАЯ СТЕНА</span><span class="t3">выше уровня пробоя</span></div></div>' +
+        '<div class="row" style="justify-content:space-between;margin-top:7px"><span class="t3">СПРЕД 0.02%</span><span class="t3">ОБЪЁМ НА ПРОБОЕ −41% К СРЕДНЕМУ</span></div>'
+    }
+  }),
+  zones: TASKZONES.concat([['4a', 'Содержимое вкладки: стакан 2 колонки + аномалия + метрики', 'внутри зоны 4']]),
+  rules: TASKRULES.concat([['§6', 'Данные без точных цифр-идентификаторов: только отклонения и пропорции']]),
+  states: ['Обычный', 'Аномалия отмечена игроком', 'Данные недоступны в архиве'], jumps: ['4.5', '4.3']
+});
+
+add({
+  id: '4.5', grp: '3 · ПРАКТИКА · ИСТОЧНИКИ', title: 'Каталог вкладок и раскрытие',
+  desc: 'Аверлей над виджетом. Объясняет, какие категории вообще существуют и как открываются.',
+  render: () => taskScreen({
+    cls: 'ov-on',
+    step2: '<div class="ov" data-z="9"><div class="sheet"><div class="row" style="justify-content:space-between;align-items:center"><span class="lbl">ИСТОЧНИКИ СЦЕНАРИЯ</span><span class="ico">✕</span></div>' +
+      '<div class="t3" style="margin:6px 0 9px">Максимум 7 вкладок. Не все нужны в каждом задании. Монеты открывают доступ к данным, но не к ответу.</div>' +
+      '<div class="col">' + [
+        ['▤', 'График и структура рынка', 'открыто', 'gr'], ['≣', 'Старшие таймфреймы', 'открыто', 'gr'],
+        ['░', 'Объём и ликвидность', 'открыто', 'gr'], ['⚑', 'Новостной фон', 'открыто', 'gr'],
+        ['◍', 'Социальный сентимент', 'открыто', 'gr'], ['⊞', 'Макроконтекст', '40 монет', 'am'],
+        ['⛓', 'On-chain и Web3-данные', 'уровень 48', ''], ['☷', 'История текущей позиции', 'только в фазе «внутри»', ''],
+        ['≡', 'Мои правила и журнал', 'открыто', 'gr']]
+        .map(v => '<div class="li"><div class="lead">' + v[0] + '</div><div class="mid"><div class="a">' + v[1] + '</div><div class="b">' + v[2] + '</div></div>' + (v[3] ? '<span class="tag ' + v[3] + '">' + (v[3] === 'gr' ? '✓' : '◉') + '</span>' : '<span class="tag">□</span>') + '</div>').join('') + '</div>' +
+      '<div class="card dash" style="margin-top:9px"><div class="t3">Оплата даёт только доступ к данным. Правильный ответ, буст оценки и повышенный риск купить нельзя.</div></div></div></div>'
+  }),
+  zones: TASKZONES.concat([['9', 'Аверлей каталога вкладок (bottom sheet, высота до 78%)', 'x 10, ш 370']]),
+  rules: TASKRULES.concat([['§13', 'Монеты открывают ДАННЫЕ, никогда — ответы'], ['§6', 'Вкладки раскрываются постепенно, иконки запоминаемые']]),
+  states: ['Всё открыто', 'Есть платные', 'Заблокировано уровнем', 'Недостаточно монет'], jumps: ['4.3', '4.4']
+});
+
+add({
+  id: '4.6', grp: '3 · ПРАКТИКА · КАРТЫ', title: 'Карта навыка · деталь',
+  desc: 'Модал карты из экрана задания. Карта формулирует принцип и вопрос, а не ответ.',
+  render: () => taskScreen({
+    cls: 'ov-on',
+    step2: '<div class="ov" data-z="9"><div class="modal"><div class="row" style="justify-content:space-between;align-items:center"><span class="tag cy">КАРТА ЗАЩИТЫ</span><span class="ico">✕</span></div>' +
+      '<div class="ph" style="height:118px;margin-top:9px">АРТ КАРТЫ<br>ОБЪЕКТ В ЦЕНТРЕ · 96×96<br>без сцены и без текста</div>' +
+      '<div class="h" style="margin-top:9px">СНАЧАЛА РИСК, ПОТОМ ВХОД</div>' +
+      '<div class="t" style="margin-top:5px">Сначала определи, сколько готов потерять и при каком условии идея отменяется. Только потом смотри на возможность.</div>' +
+      '<div class="g2" style="margin-top:9px">' + [kv('ТИП', 'Защита'), kv('МАСТЕРСТВО', '2 / 3'), kv('ПРИМЕНЕНА', '34 раза'), kv('СРЕДНЕЕ КАЧЕСТВО', '81')].join('') + '</div>' +
+      '<div class="card dash" style="margin-top:9px"><div class="lbl">ГДЕ ИЗУЧАЕТСЯ</div><div class="t3" style="margin-top:4px">Обучение · глава 2 · уроки 1–3 · пройдено</div></div>' +
+      '<div class="row" style="margin-top:9px"><div class="btn gho" style="flex:1">В Академию</div><div class="btn pri" style="flex:1">Применить</div></div></div></div>'
+  }),
+  zones: TASKZONES.concat([['9', 'Модал карты: арт 118 · заголовок · принцип · мета 2×2 · связь с Академией · действия', 'ш 330, центр']]),
+  rules: TASKRULES.concat([['§7', 'Арт — объект в центре, читаемый в миниатюре, без сложной сцены'], ['§7', 'Карта не даёт готовый ответ и не повышает шанс «угадать»']]),
+  states: ['Открыта', 'Закрыта (стоимость)', 'Мастерство макс', 'Недоступна в этом правиле'], jumps: ['4.3', '7.2', '5.3']
+});
+
+add({
+  id: '4.7', grp: '3 · ПРАКТИКА · РЕШЕНИЕ', title: 'Подтверждение решения',
+  desc: 'Выбор сделан, но не зафиксирован. Последняя точка, где будущее всё ещё скрыто.',
+  render: () => taskScreen({
+    sel: 1,
+    step2: '<div class="card" data-z="7" style="border-color:rgba(200,241,53,.45)"><div class="row" style="justify-content:space-between;align-items:center"><span class="lbl" style="color:var(--acid)">ВЫБРАНО · B</span><span class="t3">можно изменить до фиксации</span></div>' +
+      '<div class="t" style="margin-top:6px">Ждать ретест уровня и подтверждение объёмом</div>' +
+      '<div class="row" style="margin-top:9px"><div class="btn gho" style="flex:1">Изменить</div><div class="btn pri" style="flex:2">Зафиксировать решение</div></div>' +
+      '<div class="t3" style="margin-top:7px">После фиксации продолжение будет раскрыто и изменения невозможны.</div></div>'
+  }),
+  zones: TASKZONES, rules: TASKRULES.concat([['§8', 'Фиксация необратима — иначе тренажёр перестаёт быть честным']]),
+  states: ['Выбрано', 'Повторный выбор', 'Зафиксировано (кнопки блокируются)'], jumps: ['4.8', '4.10', '4.3']
+});
+
+add({
+  id: '4.8', grp: '3 · ПРАКТИКА · РЕШЕНИЕ', title: 'Дополнительный шаг',
+  desc: 'Контекстная панель. Существует только в части сценариев и никогда не превращается в форму ордера.',
+  render: () => taskScreen({
+    sel: 1, pct: 55, right: 'ШАГ 2 ИЗ 2',
+    step2: '<div class="card" data-z="7" style="border-color:rgba(87,210,230,.45)"><div class="row" style="justify-content:space-between"><span class="lbl" style="color:var(--cyan)">ДОПОЛНИТЕЛЬНЫЙ ШАГ</span><span class="t3">влияет на блок «риск»</span></div>' +
+      '<div class="t" style="margin:6px 0 8px">Определи условие, при котором идея отменяется</div>' +
+      '<div class="g2">' + ['Закрытие обратно в диапазон', 'Ретест без объёма', 'Слом старшего уровня', 'Условия не заданы']
+        .map((v, i) => '<div class="btn sm ' + (i === 1 ? 'pri' : (i === 3 ? 'gho dis' : 'gho')) + '">' + v + '</div>').join('') + '</div>' +
+      '<div class="btn pri" style="margin-top:9px">Подтвердить и раскрыть рынок</div></div>'
+  }),
+  zones: TASKZONES, rules: TASKRULES.concat([['§4', 'Доп. шаг — только выбор из готовых вариантов'], ['NO', 'Запрещено вводить числа руками — это ордер-форма']]),
+  states: ['Шаг есть', 'Шага нет (панель не рендерится)', 'Выбрано', 'Заблокировано правилом'], jumps: ['4.10', '4.7']
+});
+
+add({
+  id: '4.9', grp: '3 · ПРАКТИКА · РЕШЕНИЕ', title: 'Фаза «внутри позиции»',
+  desc: 'Тот же каркас, другой тип решения: контекст изменился после входа.',
+  render: () => taskScreen({
+    phase: 'В��УТРИ ПОЗИЦИИ · t₀+3',
+    head: 'НОВОСТЬ ПРИШЛА ПОСЛЕ ВХОДА.<br>КАК ВСЕГДА.',
+    sub: 'План был. Контекст изменился. План об этом не предупреждали.',
+    entity2: 1,
+    browser: { tabs: TABS_FULL.map((t, i) => [t[0], t[1], i === 3 ? 'on' : (t[2] === 'lk' ? 'lk' : '')]), url: 'arena://situation-1147/news', view: '<div class="col">' + [['ИСТОЧНИК A', 'Надёжность 95%', 'Регулятор выразил обеспокоенность', 'gr'], ['ИСТОЧНИК B', 'Надёжность 80%', 'Крупный адрес переместил средства', 'am'], ['ИСТОЧНИК C', 'Надёжность 25%', 'Анонимный канал обещает разворот', 'rd']]
+      .map(v => '<div class="li" style="padding:7px 0"><div class="mid"><div class="a">' + v[2] + '</div><div class="b">' + v[0] + ' · ' + v[1] + '</div></div><span class="tag ' + v[3] + '">◉</span></div>').join('') + '</div>' },
+    opts: ['Закрыть по плану', 'Сократить риск частью', 'Держать без изменений', 'Усреднить с плечом'],
+    cards: skill('НОВОСТЬ — НЕ СИГНАЛ', 'чтение', 'on') + skill('НЕ УСРЕДНЯЙ ОШИБКУ', 'защита', '') + skill('ПЛАН ВАЖНЕЕ ПРИБЫЛИ', 'решение', '') + skill('ВНЕ РЫНКА — ТОЖЕ РЕШЕНИЕ', 'решение', 'lk', 80)
+  }),
+  zones: TASKZONES, rules: TASKRULES.concat([['§4', 'Фаз�� меняет смысл вариантов, но не их количество и позицию']]),
+  states: ['Новость', 'Резкое движение', 'Тишина', 'Две угрозы активны'], jumps: ['4.10', '4.3']
+});
+
+add({
+  id: '4.10', grp: '3 · ПРАКТИКА · РАСКРЫТИЕ', title: 'Раскрытие рынка (play-forward)',
+  desc: 'После фиксации заранее зафиксированное продолжение доигрывается вперёд. Никакой генерации в реальном времени.',
+  render: () => screen(
+    taskbar({ z: '1', label: 'РАСКРЫТИЕ', right: 'ФАКТ 1 ИЗ 3', pct: 70 }) +
+    '<div class="card q" data-z="2"><div class="lbl">СЛОЙ 1 · ФАКТ РЫНКА</div><div class="h" style="margin-top:4px">ЦЕНА ВЕРНУЛАСЬ В ДИАПАЗОН ЗА 7 СВЕЧЕЙ.</div>' +
+    '<div class="t" style="margin-top:5px">Рынок не был против тебя. Ему просто нужна была ликвидность.</div></div>' +
+    browser({ z: '3', tabs: [['▤', 'ГРАФИК', 'on'], ['≣', 'СТАРШИЙ TF', ''], ['░', 'ОБЪЁМ', '']], url: 'arena://situation-1147/reveal', meta: 'ПРОДОЛЖЕНИЕ РАСКРЫТО', view: chart({ seed: 7, hide: 0, t0: 1, t0label: 't₀ · точка решения' }) }) +
+    '<div class="row" data-z="4" style="gap:7px"><span class="tag">СКОРОСТЬ ×1</span><span class="tag">×2</span><span class="tag">▶ ПОВТОРИТЬ</span><span class="tag cy">КАДР 7/7</span></div>' +
+    sec('СЛОЙ 2 · ПОСЛЕДСТВИЕ ТВОЕГО ПОВЕДЕНИЯ') +
+    '<div class="card" data-z="5"><div class="t">Ты ждал ретест и не вошёл: условие подтверждения так и не появилось. Позиции нет, ошибки тоже.</div>' +
+    '<div class="g2" style="margin-top:9px">' + [kv('ДЕЙСТВИЕ', 'Ждать ретест'), kv('ИСХОД РЫНКА', 'Ложный пробой')].join('') + '</div></div>' +
+    '<div class="card dash" data-z="6"><div class="t3">Продолжение было зафиксировано до твоего ответа. Хэш совпадает — данные не подменены.</div></div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="btn pri" data-z="7">К оценке качества решения</div>', null),
+  zones: [['1', 'Топ-бар фазы раскрытия', 'h 40'], ['2', 'Факт рынка (слой 1)', 'h 92'], ['3', 'График с раскрытым продолжением и меткой t₀', 'h 196'], ['4', 'Управление воспроизведением', 'h 20'], ['5', 'Последствие поведения (слой 2)', 'h auto'], ['6', 'Подтверждение честности (хэш)', 'h 40'], ['7', 'Переход к слою 3', 'sticky, h 40']],
+  rules: [['§8', 'Раскрывается заранее зафиксированное продолжение, а не генерация'], ['§10', 'Разделение слоёв: факт ≠ последствие ≠ оценка'], ['NO', 'Запрещено показывать виртуальную прибыль/убыток в деньгах']],
+  states: ['Анимация идёт', 'Пауза', 'Завершено', 'Анимация отключена в настройках'], jumps: ['4.11', '4.12']
+});
+
+add({
+  id: '4.11', grp: '3 · ПРАКТИКА · РАСКРЫТИЕ', title: 'Оценка качества решения 0–100',
+  desc: 'Слой 3. Нет победы и поражения: есть пять критериев и переносимое правило.',
+  render: () => screen(
+    taskbar({ z: '1', label: 'КАЧЕСТВО РЕШЕНИЯ', right: 'ФАКТ 3 ИЗ 3', pct: 100 }) +
+    '<div class="card q" data-z="2"><div class="row" style="align-items:center;gap:12px"><div class="score"><div class="dial"><span>78</span></div></div>' +
+    '<div style="flex:1"><div class="h2">РЕШЕНИЕ, С КОТОРЫМ МОЖНО ЖИТЬ</div>' +
+    '<div class="t3" style="margin-top:4px">Рынок шёл не туда, куда ты думал. Решение от этого не стало хуже.</div>' +
+    '<div class="row" style="margin-top:7px;gap:6px"><span class="tag ac">+24 XP</span><span class="tag am">+6 МОНЕТ</span><span class="tag">СЕРИЯ 7</span></div></div></div></div>' +
+    sec('КРИТЕРИИ', 'ВЕСА ИЗ БРИФИНГА') +
+    '<div class="card" data-z="3">' + [['Учёт контекста', 25, 21], ['Работа с доказательствами', 20, 18], ['Выбор действия', 20, 14], ['Управление риском', 20, 15], ['Дисциплина', 15, 10]]
+      .map(v => '<div class="row" style="align-items:center;gap:9px;margin-bottom:7px"><span class="t" style="flex:1">' + v[0] + '</span><span class="bar" style="width:96px"><i style="width:' + Math.round(v[2] / v[1] * 100) + '%"></i></span><span class="lbl" style="width:42px;text-align:right">' + v[2] + '/' + v[1] + '</span></div>').join('') + '</div>' +
+    sec('ГДЕ ПОТЕРЯНО') +
+    '<div class="li" data-z="4"><div class="lead">⚠</div><div class="mid"><div class="a">Решение принято до проверки старшего таймфрейма</div><div class="b">Повтор № 5 · тег E-007</div></div><span class="tag mg">FIX</span></div>' +
+    sec('ПЕРЕНОСИМОЕ ПРАВИЛО') +
+    '<div class="card" data-z="5" style="border-color:rgba(200,241,53,.4)"><div class="t" style="color:var(--tx)">Если подтверждение объёмом не появилось до закрытия свечи — идея отменяется без обсуждения.</div>' +
+    '<div class="row" style="margin-top:8px;gap:7px"><span class="tag gr">ЗАПИСАНО В ЖУРНАЛ</span><span class="tag cy">КАРТА УКРЕПЛЕНА</span></div></div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="g2" data-z="6"><div class="btn gho">Разбор</div><div class="btn gho">Источники</div><div class="btn gho">В журнал</div><div class="btn pri">Следующее</div></div>', null),
+  zones: [['1', 'Топ-бар', 'h 40'], ['2', 'Сводка: циферблат 84×84 + вердикт + награды', 'ш 362, h 124'], ['3', 'Пять критериев с весами', 'h 132'], ['4', 'Связь с Журналом ошибок', 'h 48'], ['5', 'Переносимое правило', 'h 88'], ['6', 'Сетка действий 2×2', 'sticky, h 88']],
+  rules: [['§10', 'Нет «победы/поражения»; контролируемый убыток может дать 100'], ['§10', 'Награда только за качество, никогда за виртуальный PnL'], ['§10', 'Обязательно выдаётся переносимое правило']],
+  states: ['Высокая оценка', 'Средняя', 'Низкая', 'Убыток при оценке 100', 'Прибыль при оценке 20'], jumps: ['4.12', '4.13', '8.2', '4.1']
+});
+
+add({
+  id: '4.12', grp: '3 · ПРАКТИКА · РАСКРЫТИЕ', title: 'Разбор: факт → логика → правило',
+  desc: 'Три блока в строгом порядке. Отдельно — альтернативные ветки и разбор угроз.',
+  render: () => screen(
+    taskbar({ z: '1', label: 'РАЗБОР', right: 'СЦЕНАРИЙ 14/40', pct: 100 }) +
+    '<div class="col" data-z="2">' + [
+      ['ФАКТ', 'Пробой был, объём на нём оказался ниже среднего, цена вернулась в диапазон.', 'cy'],
+      ['ЛОГИКА', 'Движение без участия объёма не имеет того, кто будет его продолжать. Такой пробой чаще собирает стопы, а не начинает тренд.', 'am'],
+      ['ПРАВИЛО', 'Нет подтверждения — нет сделки. Правило работает на любом активе и любом таймфрейме.', 'ac']]
+      .map(v => '<div class="card"><span class="tag ' + v[2] + '">' + v[0] + '</span><div class="t" style="margin-top:7px">' + v[1] + '</div></div>').join('') + '</div>' +
+    sec('АЛЬТЕРНАТИВНЫЕ ВЕТКИ', 'ЧТО БЫЛО БЫ') +
+    '<div class="col" data-z="3">' + [['A · Войти на пробое', 'Стоп собран на 3-й свече · качество 31', 'rd'], ['B · Ждать ретест', 'Ваш выбор · качество 78', 'ac'], ['C · Проверить старший TF', 'Идеальный путь · качество 92', 'gr'], ['D · Усреднить с плечом', 'Сценарий разрушения · качество 08', 'rd']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag ' + v[2] + '">◉</span></div>').join('') + '</div>' +
+    sec('УГРОЗЫ В ЭТОЙ СИТУАЦИИ') +
+    '<div class="g2" data-z="4">' + [['FAKE BREAKOUT PHANTOM', 'стадия II'], ['FOMO WRAITH', 'силуэт']]
+      .map(v => '<div class="ent"><div class="ph" style="height:56px">АРТ</div><div class="h2" style="margin-top:6px">' + v[0] + '</div><div class="t3">' + v[1] + '</div></div>').join('') + '</div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="row" data-z="5"><div class="btn gho" style="flex:1">Источники</div><div class="btn pri" style="flex:1">Продолжить</div></div>', null),
+  zones: [['1', 'Топ-бар', 'h 40'], ['2', 'Три блока разбора в жёстком порядке', 'ш 362, h ~86 каждый'], ['3', 'Альтернативные ветки A–D с качеством', '4 строки × 48'], ['4', 'Угрозы сценария 2 в ряд', 'клетка 177×108'], ['5', 'Действия', 'sticky, h 40']],
+  rules: [['§10', 'Разбор всегда в порядке факт → логика → переносимое правило'], ['§16', 'Язык: «рынок принял твоё решение», а не «ты ошибся»']],
+  states: ['Разбор полный', 'Сжатый (высокий уровень)', 'Расширенный (повторная ошибка)'], jumps: ['4.13', '6.2', '4.1']
+});
+
+add({
+  id: '4.13', grp: '3 · ПРАКТИКА · РАСКРЫТИЕ', title: 'Источники и методика',
+  desc: 'После завершения раскрывается вся служебная правда о сценарии (§15).',
+  render: () => screen(
+    taskbar({ z: '1', label: 'ИСТОЧНИКИ', right: 'РАСКРЫТО', pct: 100 }) +
+    '<div class="card q" data-z="2"><div class="lbl">ТЕПЕРЬ МОЖНО</div><div class="t" style="margin-top:5px">Сценарий завершён. Идентификаторы больше не скрыты.</div></div>' +
+    '<div class="g2" data-z="3">' + [kv('ИНСТРУМЕНТ', 'BTC-PERP'), kv('ТАЙМФРЕЙМ', '15m'), kv('ПЕРИОД', '2021-05-13'), kv('ТОЧКА t₀', '14:45 UTC')].join('') + '</div>' +
+    sec('ДАННЫЕ И ЦЕЛОСТНОСТЬ') +
+    '<div class="col" data-z="4">' + [['Источник данных', 'Агрегатор OHLCV · архивный снимок'], ['Версия датасета', 'v2.4 · 40 ситуаций'], ['Хэш скрытого продолжения', 'a41f…8e2 · проверен ✓'], ['Версия контента', 'c-118'], ['Правила оценки', 'версия s-12 · открыты']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div></div>').join('') + '</div>' +
+    sec('НОВОСТНЫЕ ИСТОЧНИКИ', 'ССЫЛКИ АКТИВНЫ') +
+    '<div class="col" data-z="5">' + [['Заявление регулятора', 'официальный релиз · надёжность 95%'], ['Агентство', 'новостная лента · 80%'], ['Анонимный канал', 'соцсети · 25%']]
+      .map(v => '<div class="li"><div class="lead">↗</div><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="6"><div class="t3">Материал предоставлен в образовательных целях. Исторические результаты не гарантируют будущих.</div></div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="btn pri" data-z="7">Закрыть</div>', null),
+  zones: [['1', 'Топ-бар', 'h 40'], ['2', 'Заголовок раскрытия', 'h 66'], ['3', 'Мета сценария 2×2', 'клетка 177×46'], ['4', 'Целостность данных (5 строк)', 'h 48/строка'], ['5', 'Ссылки на источники', 'h 48/строка'], ['6', 'Образовательный дисклеймер', 'h 40'], ['7', 'Закрытие', 'sticky, h 40']],
+  rules: [['§15', 'После завершения открываются дата, инструмент, источники, правила оценки'], ['§15', 'Хранятся: источник, t₀, версия датасета, хэш будущего, версия контента']],
+  states: ['Раскрыто', 'Закрыто (до ответа)', 'Сценарий в турнире (раскрытие после закрытия окна)'], jumps: ['4.11', '4.1']
+});
+
+add({
+  id: '4.14', grp: '3 · ПРАКТИКА · СЕРВИС', title: 'Пауза и выход',
+  desc: 'Оверлей паузы. Выход до фиксации не штрафуется, но сценарий сохраняет тот же датасет.',
+  render: () => taskScreen({
+    cls: 'ov-on',
+    step2: '<div class="ov" data-z="9"><div class="modal"><div class="lbl">ПАУЗА</div><div class="h" style="margin-top:6px">РЫНОК ПОДОЖДЁТ.<br>ОН УЖЕ ЗАКРЫЛСЯ �� 2021 ГОДУ.</div>' +
+      '<div class="col" style="margin-top:12px"><div class="btn pri">Продо��жить</div><div class="btn gho">Правила оценки</div><div class="btn gho">Настройки доступности</div><div class="btn gho">Сохранить и выйти</div></div>' +
+      '<div class="card dash" style="margin-top:10px"><div class="t3">Выход без фиксации не штрафуется. При возврате будет тот же сценарий и та же версия данных.</div></div></div></div>'
+  }),
+  zones: TASKZONES.concat([['9', 'Модал паузы: 4 действия + пояснение', 'ш 330']]),
+  rules: [['§13', 'Выход из сценария не наказывается — антишантажная механика'], ['§15', 'При возврате датасет и t₀ те же']],
+  states: ['Пауза', 'Подтверждение выхода', 'Автопауза при потере фокуса'], jumps: ['4.3', '3.1']
+});
+
+/* ---------------- 5. ОБУЧЕНИЕ ---------------- */
+add({
+  id: '5.1', grp: '4 · ОБУЧЕНИЕ', title: 'Главы',
+  desc: 'Теория идёт ДО практики. Закрытая глава выходит из ротации и открывает угроза.',
+  render: () => screen(
+    topbar() +
+    '<div class="card q" data-z="2"><div class="row" style="justify-content:space-between;align-items:center"><div><div class="lbl">ТЕКУЩАЯ ГЛАВА</div><div class="h2" style="margin-top:4px">ГЛАВА 4 · ОБЪЁМ И ЛИКВИДНОСТЬ</div></div><span class="tag ac">73%</span></div>' +
+    '<div class="bar" style="margin-top:9px"><i style="width:73%"></i></div>' +
+    '<div class="btn pri" style="margin-top:9px">Продолжить урок 5 из 7</div></div>' +
+    sec('КАРТА ГЛАВ', '7 ГЛАВ') +
+    '<div class="card" data-z="3">' + [['1', 'Структура и уровни', 'done'], ['2', 'Подтверждение и риск', 'done'], ['3', 'Ловушки и ложные сигналы', 'done'], ['4', 'Объём и ликвидность', 'cur'], ['5', 'Новости и шум', 'lock'], ['6', 'Психология и дисциплина', 'lock'], ['7', 'Web3-риски', 'lock']]
+      .map((v, i) => '<div class="row" style="align-items:center;gap:10px;padding:5px 0"><span class="node ' + v[2] + '">' + (v[2] === 'done' ? '✓' : v[0]) + '</span>' +
+        '<div style="flex:1"><div class="t" style="color:' + (v[2] === 'lock' ? 'var(--tx3)' : 'var(--tx)') + '">' + v[1] + '</div>' +
+        '<div class="t3">' + (v[2] === 'done' ? 'закрыта · вышла из ротации' : v[2] === 'cur' ? '5 из 7 уроков' : 'откроется после главы ' + (+v[0] - 1)) + '</div></div>' +
+        (v[2] === 'done' ? '<span class="tag gr">+240 ◉</span>' : v[2] === 'cur' ? '<span class="tag ac">ИДЁТ</span>' : '<span class="tag">✕</span>') + '</div>').join('') + '</div>' +
+    sec('УРОК ДНЯ', '+50 XP') +
+    '<div class="li" data-z="4"><div class="lead">☉</div><div class="mid"><div class="a">Почему объём не подтверждает направление</div><div class="b">3 мин · серия 6 дней</div></div><span class="tag ac">НАЧАТЬ</span></div>' +
+    sec('ПОИСК ПО ТЕМАМ') +
+    '<div class="row w" data-z="5">' + ['ВСЕ', 'СТРУКТУРА', 'РИСК', 'ПСИХО', 'ШУМ', 'WEB3', 'НЕ ПРОЙДЕНО'].map((v, i) => '<span class="tag' + (i === 0 ? ' ac' : '') + '">' + v + '</span>').join('') + '</div>', 'ОБУЧЕНИЕ'),
+  zones: [['1', 'Топ-бар', 'sticky, h 42'], ['2', 'Карточка текущей главы + CTA', 'ш 362, h 118'], ['3', 'Карта глав: узлы 26×26 в вертикальном списке', 'h 44/строка'], ['4', 'Урок дня', 'h 48'], ['5', 'Фильтры тем', 'wrap']],
+  rules: [['README', 'Теория открывает практику, а не наоборот'], ['README', 'Закрытая глава → крупная награда монетами + новая угроза'], ['§13', 'Защитные знания нельзя запереть за пейволл']],
+  states: ['В процессе', 'Глава закрыта', 'Всё пройдено'], jumps: ['5.2', '5.3', '3.1']
+});
+
+add({
+  id: '5.2', grp: '4 · ОБУЧЕНИЕ', title: 'Дерево тем главы',
+  desc: 'Связи тем видны явно: каждая тема привязана к карте навыка и к типу сценария.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>ГЛАВА 4</span><span>ОБЪЁМ И ЛИКВИДНОСТЬ</span></div><div class="bar c"><i style="width:73%"></i></div></div><div class="ico">?</div></div>' +
+    '<div class="card q" data-z="2"><div class="t">Глава закроется, когда все 7 тем проверены на практике. После этого темы выходят из ротации.</div></div>' +
+    '<div class="card" data-z="3" style="padding:12px">' +
+    [['Объём как данные', 'done', 'ОБЪЁМ'], ['Средние и всплески', 'done', 'ОБЪЁМ'], ['Стакан и стены', 'done', 'ЛИКВИДНОСТЬ'], ['Пробой без объёма', 'cur', 'НЕТ ПОДТВЕРЖДЕНИЯ'], ['Охота за стопами', 'lock', 'СНАЧАЛА РИСК'], ['Слиппаж и исполнение', 'lock', 'ЛИМИТ РИСКА'], ['Корреляции ликвидности', 'lock', 'ПРОВЕРЬ TF']]
+      .map((v, i) => '<div class="row" style="align-items:center;gap:10px">' + (i ? '' : '') + '<span class="node ' + v[1] + '">' + (v[1] === 'done' ? '✓' : i + 1) + '</span><div style="flex:1"><div class="t" style="color:' + (v[1] === 'lock' ? 'var(--tx3)' : 'var(--tx)') + '">' + v[0] + '</div><div class="t3">карта: ' + v[2] + '</div></div><span class="tag' + (v[1] === 'cur' ? ' ac' : '') + '">' + (v[1] === 'done' ? '100' : v[1] === 'cur' ? '40' : '—') + '</span></div>' + (i < 6 ? '<div class="link"></div>' : '')).join('') + '</div>' +
+    '<div class="card dash" data-z="4"><div class="lbl">ОТКРОЕТСЯ ПОСЛЕ ЗАКРЫТИЯ ГЛАВЫ</div><div class="row" style="margin-top:7px;gap:7px"><span class="tag am">+240 МОНЕТ</span><span class="tag mg">УГРОЗА: LIQUIDITY HYDRA</span></div></div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="row" data-z="5"><div class="btn gho" style="flex:1">Проверка мастерства</div><div class="btn pri" style="flex:1">Следующая тема</div></div>', null),
+  zones: [['1', 'Топ-бар главы с прогрессом', 'h 40'], ['2', 'Правило закрытия главы', 'h 62'], ['3', 'Дерево тем: узел + связь + привязка к карте', 'h 46/тема'], ['4', 'Награда за закрытие главы', 'h 62'], ['5', 'Действия', 'sticky, h 40']],
+  rules: [['§12', 'Каждая тема связана с картой навыка и типом сценария'], ['README', 'Закрытая тема выходит из ротации']],
+  states: ['В процессе', 'Готова к проверке', 'Закрыта'], jumps: ['5.3', '5.5', '5.1']
+});
+
+add({
+  id: '5.3', grp: '4 · ОБУЧЕНИЕ', title: 'Урок · теория',
+  desc: 'Модуль ≤ 90 секунд. Один тезис, одна иллюстрация, одно применение.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">✕</div><div class="xpwrap"><div class="r"><span>УРОК 5 ИЗ 7</span><span>~90 СЕК</span></div><div class="bar c"><i style="width:45%"></i></div></div><div class="ico">≡</div></div>' +
+    '<div class="card q" data-z="2"><div class="lbl">ТЕЗИС</div><div class="h" style="margin-top:5px">ОБЪЁМ НЕ ПОКАЗЫВАЕТ НАПРАВЛЕНИЕ.<br>ОН ПОКАЗЫВАЕТ УЧАСТИЕ.</div></div>' +
+    '<div class="card" data-z="3">' + chart({ seed: 3, n: 22, h: 108, hide: 0 }) + '<div class="t3" style="margin-top:7px">Сравнение: два пробоя одного уровня, разный объём</div></div>' +
+    '<div class="col" data-z="4">' + [['Что верно', 'Всплеск объёма говорит о том, что в движении есть участники.', 'gr'], ['Что ложно', 'Высокий объём не означает, что движение продолжится.', 'rd']]
+      .map(v => '<div class="card"><span class="tag ' + v[2] + '">' + v[0] + '</span><div class="t" style="margin-top:6px">' + v[1] + '</div></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="5"><div class="lbl">СВЯЗАННАЯ КАРТА</div><div class="row" style="align-items:center;gap:9px;margin-top:7px"><div class="ph" style="width:44px;height:44px">АРТ</div><div style="flex:1"><div class="h2">НЕТ ПОДТВЕРЖДЕНИЯ — НЕТ СДЕЛКИ</div><div class="t3">Мастерство 2/3</div></div></div></div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="row" data-z="6"><div class="btn gho" style="flex:1">Повторить</div><div class="btn pri" style="flex:2">К пр��ктике →</div></div>', null),
+  zones: [['1', 'Топ-бар урока с оценкой времени', 'h 40'], ['2', 'Тезис — главный блок', 'h 88'], ['3', 'Иллюстрация/график сравнения', 'h 140'], ['4', 'Два блока: верно / ложно', 'h 74 каждый'], ['5', 'Привязка к карте навыка', 'h 84'], ['6', 'Переход к практике', 'sticky, h 40']],
+  rules: [['Метрики', 'Обучающий модуль ≤ 90 сек'], ['§12', 'Обучение связана с картами и сценариями, а не самоцельна']],
+  states: ['Теория', 'Пройдено', 'Повторное чтение'], jumps: ['5.4', '5.2']
+});
+
+add({
+  id: '5.4', grp: '4 · ОБУЧЕНИЕ', title: 'Урок · практика',
+  desc: 'Микрозадача в том же каркасе задания, но без оценки 0–100: только верно/неверно и почему.',
+  render: () => taskScreen({
+    phase: 'ПРАКТИКА УРОКА', right: 'БЕЗ ОЦЕНКИ', pct: 45, entity: false,
+    head: 'НАЙДИ МЕСТО, ГДЕ ОБЪЁМ СОЛГАЛ.',
+    sub: 'Один вопрос, четыре варианта. Формат такой же, как в Практике.',
+    browser: { tabs: [['▤', 'ГРАФИК', 'on'], ['░', 'ОБЪЁМ', '']], url: 'academy://ch4/lesson5/practice', view: chart({ seed: 19, hide: 0 }) },
+    cards: skill('ОБЪЁМ КАК ПОДТВЕРЖДЕНИЕ', 'чтение', 'on') + skill('—', 'слот пуст', 'hid') + skill('—', 'слот пуст', 'hid') + skill('—', 'слот пуст', 'hid'),
+    cardsRight: 'ТОЛЬКО ИЗУЧАЕМАЯ',
+    opts: ['Свеча 3 · всплеск без продолжения', 'Свеча 7 · рост объёма на теле', 'Свеча 12 · пробой на сухом объёме', 'Объём не солгал нигде'],
+    sel: 2,
+    step2: '<div class="card" data-z="7" style="border-color:rgba(95,203,139,.45)"><div class="row" style="justify-content:space-between"><span class="tag gr">ВЕРНО</span><span class="t3">+50 XP · мастерство карты 2/3 → 3/3</span></div><div class="t" style="margin-top:6px">Пробой на сухом объёме — это движение без участников. Кто его продолжит?</div><div class="btn pri" style="margin-top:9px">Следующая тема</div></div>'
+  }),
+  zones: TASKZONES, rules: TASKRULES.concat([['§12', 'Практика Обучении использует тот же каркас, что Практика — нет второго интерфейса']]),
+  states: ['Вопрос', 'Верно', 'Неверно', 'Мастерство повышено'], jumps: ['5.5', '5.2']
+});
+
+add({
+  id: '5.5', grp: '4 · ОБУЧЕНИЕ', title: 'Проверка мастерства',
+  desc: 'Закрывает главу. Требования видны заранее, доступ не продаётся.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>ПРОВЕРКА МАСТЕРСТВА</span><span>ГЛАВА 4</span></div><div class="bar c"><i style="width:75%"></i></div></div><div class="ico">?</div></div>' +
+    '<div class="card q" data-z="2"><div class="row" style="align-items:center;gap:12px"><div class="score"><div class="dial" style="--p:75"><span>75%</span></div></div><div style="flex:1"><div class="h2">ГОТОВНОСТЬ К ПРОВЕРКЕ</div><div class="t3" style="margin-top:4px">Нужно 80% по каждому критерию</div></div></div></div>' +
+    sec('ТРЕБОВАНИЯ') +
+    '<div class="col" data-z="3">' + [['Все 7 тем главы пройдены', '5/7', ''], ['3 сценария с качеством ≥ 70', '4/3', 'ok'], ['Ошибка E-007 не повторялась 5 сценариев', '2/5', ''], ['Карта «Объём как подтверждение»: мастерство 3/3', '3/3', 'ok']]
+      .map(v => '<div class="li"><div class="lead">' + (v[2] ? '✓' : '○') + '</div><div class="mid"><div class="a">' + v[0] + '</div></div><span class="tag ' + (v[2] ? 'gr' : '') + '">' + v[1] + '</span></div>').join('') + '</div>' +
+    sec('ФОРМАТ ПРОВЕРКИ') +
+    '<div class="card" data-z="4"><div class="t">3 сценария подряд с гидрой ликвидности. Правило задан системой, подсказок нет, вкладок 5.</div>' +
+    '<div class="g2" style="margin-top:9px">' + [kv('СЦЕНАРИЕВ', '3'), kv('ПОРОГ', '80 по всем'), kv('ПОПЫТКИ', 'без лимита'), kv('СТОИМОСТЬ', 'бесплатно')].join('') + '</div></div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Проверку нельзя купить, ускорить или пропустить за монеты.</div></div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="row" data-z="6"><div class="btn pri" style="flex:1">Тренироваться</div><div class="btn dis" style="flex:1">Начать проверку</div></div>', null),
+  zones: [['1', 'Топ-бар', 'h 40'], ['2', 'Циферблат готовности 84×84', 'h 108'], ['3', 'Чек-лист требований', 'h 48/строка'], ['4', 'Формат проверки + мета 2×2', 'h 132'], ['5', 'Антипейволл-плашка', 'h 40'], ['6', 'Действия (заблокированное основное)', 'sticky, h 40']],
+  rules: [['§13', 'Запрещено продавать доступ к проверке и буст оценки'], ['§11', 'Сложность растёт через меньшее число подсказок, а не через таймер']],
+  states: ['Не готов', 'Готов', 'Проверка идёт', 'Провалена (без штрафа)', 'Закрыта'], jumps: ['4.1', '5.2']
+});
+
+/* ---------------- 6. УГРОЗЫ ---------------- */
+add({
+  id: '6.1', grp: '5 · УГРОЗЫ', title: 'Категории угроз',
+  desc: 'Четыре группы из ТЗ. Нераскрытые — силуэты без имени.',
+  render: () => screen(
+    topbar() +
+    '<div class="card q" data-z="2"><div class="row" style="justify-content:space-between;align-items:center"><div><div class="lbl">УГРОЗЫ</div><div class="h2" style="margin-top:4px">14 ИЗ 32 РАСКРЫТО</div></div><span class="tag mg">3 АКТИВНЫ</span></div>' +
+    '<div class="bar" style="margin-top:9px"><i style="width:44%"></i></div></div>' +
+    '<div class="row w" data-z="3">' + [['ВСЕ 32', 'ac'], ['СИГНАЛЫ 7', ''], ['ЭМОЦИИ 9', ''], ['НАРРАТИВЫ 5', ''], ['РИСК 4', ''], ['WEB3 8', '']].map(v => '<span class="tag ' + v[1] + '">' + v[0] + '</span>').join('') + '</div>' +
+    sec('СИГНАЛЫ И СТРУКТУРА', '4 ИЗ 7') +
+    '<div class="g3" data-z="4">' + [['FAKE BREAKOUT PHANTOM', 'III'], ['WICK MIMIC', 'II'], ['INDICATOR CULT', 'I'], ['STOP-HUNT KRAKEN', 'I'], ['?', 'lk'], ['?', 'lk']]
+      .map(v => v[1] === 'lk'
+        ? '<div class="ent lk"><div class="ph" style="height:62px">СИЛУЭТ</div><div class="h2" style="margin-top:5px">ЗАКРЫТО</div><div class="t3">встреть в сценарии</div></div>'
+        : '<div class="ent"><div class="ph" style="height:62px">АРТ</div><div class="h2" style="margin-top:5px;font-size:8px">' + v[0] + '</div><div class="t3">стадия ' + v[1] + '</div></div>').join('') + '</div>' +
+    sec('ЭМОЦИИ И ПОВЕДЕНИЕ', '3 ИЗ 9') +
+    '<div class="g3" data-z="5">' + [['FOMO WRAITH', 'II'], ['REVENGE WRAITH', 'I'], ['ANCHOR GOLEM', 'I'], ['?', 'lk'], ['?', 'lk'], ['?', 'lk']]
+      .map(v => v[1] === 'lk'
+        ? '<div class="ent lk"><div class="ph" style="height:62px">СИЛУЭТ</div><div class="h2" style="margin-top:5px">ЗАКРЫТО</div><div class="t3">—</div></div>'
+        : '<div class="ent"><div class="ph" style="height:62px">АРТ</div><div class="h2" style="margin-top:5px;font-size:8px">' + v[0] + '</div><div class="t3">стадия ' + v[1] + '</div></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="6"><div class="t3">Угрозы — язык описания давлений и ловушек. У них нет HP и боёв, их нельзя убить.</div></div>', 'УГРОЗЫ'),
+  zones: [['1', 'Топ-бар', 'sticky'], ['2', 'Прогресс раскрытия', 'h 96'], ['3', 'Фильтры категорий', 'wrap'], ['4', 'Сетка угроз 3 в ряд', 'клетка 116×112'], ['5', 'Вторая категория', 'та же сетка'], ['6', 'Пояснение роли угроз', 'h 44']],
+  rules: [['§7', 'Угрозы — метафоры реальных ошибок, а не противники с HP'], ['README', 'На низкой готовности угроза не называется прямо']],
+  states: ['Частично раскрыто', 'Пусто (новичок)', 'Всё раскрыто'], jumps: ['6.2', '6.3', '3.1']
+});
+
+add({
+  id: '6.2', grp: '5 · УГРОЗЫ', title: 'Угроза · раскрыта',
+  desc: 'Карточка угрозы: арт, признаки, карты-контрмеры, история встреч.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>СИГНАЛЫ И СТРУКТУРА</span><span>СТАДИЯ III</span></div><div class="bar c"><i style="width:100%"></i></div></div><div class="ico">⚑</div></div>' +
+    '<div class="ph" style="height:170px" data-z="2">ПОРТРЕТ УГРОЗЫ<br>362×170 · стиль топ-1</div>' +
+    '<div data-z="3"><div class="big">FAKE BREAKOUT PHANTOM</div>' +
+    '<div class="t" style="margin-top:4px">Показывает тебе выход там, где его нет. Вежливо. Перед самым закрытием двери.</div></div>' +
+    '<div class="g2" data-z="4">' + [kv('ДАВЛЕНИЕ', '35 / 100'), kv('ВСТРЕЧ', '9'), kv('СР. КАЧЕСТВО', '61'), kv('КАТЕГОРИЯ', 'Сигналы')].join('') + '</div>' +
+    sec('ПРИЗНАКИ ПОЯВЛЕНИЯ') +
+    '<div class="col" data-z="5">' + ['Цена вышла за уровень без роста объёма', 'Старший таймфрейм остаётся в диапазоне', 'Социальный фон резко единодушен']
+      .map(v => '<div class="li"><div class="lead">◈</div><div class="mid"><div class="a">' + v + '</div></div></div>').join('') + '</div>' +
+    sec('КАРТЫ-КОНТРМЕРЫ') +
+    '<div class="g3" data-z="6">' + [skill('НЕТ ПОДТВЕРЖДЕНИЯ', 'решение', 'on'), skill('ПРОВЕРЬ СТАРШИЙ TF', 'чтение', ''), skill('ЖДАТЬ', 'решение', '')].join('') + '</div>' +
+    sec('ГДЕ ВСТРЕЧАЛСЯ') +
+    '<div class="col" data-z="7">' + [['Сценарий 14 · качество 78', '2 ч назад'], ['Сценарий 09 · качество 42', '3 д назад']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag">ОТКРЫТЬ</span></div>').join('') + '</div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="btn pri" data-z="8">Тренироваться против этой угрозы</div>', null),
+  zones: [['1', 'Топ-бар категории', 'h 40'], ['2', 'Арт угрозы', 'ш 362, h 170'], ['3', 'Имя + сатирическое описание', 'h 66'], ['4', 'Мета 2×2', 'клетка 177×46'], ['5', 'Признаки появления', 'h 48/строка'], ['6', 'Карты-контрмеры 3 в ряд', '116×74'], ['7', 'История встреч', 'h 48/строка'], ['8', 'Целевая тренировка', 'sticky, h 40']],
+  rules: [['§7', 'Угроза всегда связана с реальной ошибкой и картами-контрмерами'], ['§16', 'Тон: сатира над поведением, не над жертвами']],
+  states: ['Раскрыта I/II/III', 'Силуэт', 'Активна сейчас'], jumps: ['6.1', '4.1', '7.2']
+});
+
+add({
+  id: '6.3', grp: '5 · УГРОЗЫ', title: 'Угроза · силуэт',
+  desc: 'Закрытое состояние. Показывает, как открыть, но не раскрывает имя и признаки.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>НЕИЗВЕСТНАЯ УГРОЗА</span><span>СИЛУЭТ</span></div><div class="bar c"><i style="width:12%"></i></div></div><div class="ico">?</div></div>' +
+    '<div class="ph" style="height:170px;filter:blur(1px)" data-z="2">СИЛУЭТ · 100% ЗАТЕМНЕНИЕ<br>тот же блок 362×170</div>' +
+    '<div data-z="3"><div class="big" style="color:var(--tx3)">ИМЯ СКРЫТО</div><div class="t" style="margin-top:4px">Ты ещё не сталкивался с этим достаточно больно, чтобы запомнить.</div></div>' +
+    '<div class="g2" data-z="4">' + [kv('КАТЕГОРИЯ', 'Риск'), kv('СТАДИЯ', '0 / III'), kv('ВСТРЕЧ', '0'), kv('ДАВЛЕНИЕ', '—')].join('') + '</div>' +
+    sec('КАК ОТКРЫТЬ') +
+    '<div class="col" data-z="5">' + [['Закрыть главу 5 Обучении', 'прогресс 0/7'], ['Встретить в сценарии уровня 48+', 'текущий 42'], ['Не покупается за монеты', 'по дизайну']]
+      .map(v => '<div class="li"><div class="lead">○</div><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="6"><div class="t3">На низкой готовности угрозы не называются прямо: сначала опыт, потом имя.</div></div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="btn gho" data-z="7">К главе 5 Обучении</div>', null),
+  zones: [['1', 'Топ-бар', 'h 40'], ['2', 'Затемнённый арт (та же геометрия, что в 6.2)', 'ш 362, h 170'], ['3', 'Заглушка имени', 'h 66'], ['4', 'Мета без значений', 'клетка 177×46'], ['5', 'Условия раскрытия', 'h 48/строка'], ['6', 'Пояснение правила', 'h 44'], ['7', 'Переход в Академию', 'sticky, h 40']],
+  rules: [['README', 'Угрозы открываются опытом и закрытыми главами'], ['§13', 'Запрещено продавать раскрытие угроз за монеты']],
+  states: ['Силуэт', 'Условие выполнено', 'Открывается'], jumps: ['6.1', '5.1']
+});
+
+/* ---------------- 7. КОЛЛЕКЦИЯ ---------------- */
+add({
+  id: '7.1', grp: '6 · КОЛЛЕКЦИЯ', title: 'Карты навыков',
+  desc: 'Три типа: чтение, решение, защита. Арт — объект в центре, читаемый в миниатюре.',
+  render: () => screen(
+    topbar() +
+    '<div class="row w" data-z="2">' + [['ВСЕ 12', 'ac'], ['ЧТЕНИЕ 5', ''], ['РЕШЕНИЕ 4', ''], ['ЗАЩИТА 3', ''], ['ЗАКРЫТЫЕ 6', '']].map(v => '<span class="tag ' + v[1] + '">' + v[0] + '</span>').join('') + '</div>' +
+    sec('ОТКРЫТЫ', '12 ИЗ 18') +
+    '<div class="g2" data-z="3">' + [['СНАЧАЛА РИСК, ПОТОМ ВХОД', 'защита', '3/3'], ['НЕТ ПОДТВЕРЖДЕНИЯ — НЕТ СДЕЛКИ', 'решение', '2/3'], ['ПРОВЕРЬ СТАРШИЙ ТАЙМФРЕЙМ', 'чтение', '3/3'], ['НОВОСТЬ — НЕ СИГНАЛ', 'чтение', '1/3'], ['НЕ УСРЕДНЯЙ ОШИБКУ', 'защита', '2/3'], ['ВНЕ РЫНКА — ТОЖЕ РЕШЕНИЕ', 'решение', '3/3']]
+      .map(v => '<div class="sk on" style="height:auto;padding:10px"><div class="ph" style="height:60px">АРТ · центр</div><div class="h2" style="margin-top:7px;font-size:8px">' + v[0] + '</div><div class="row" style="justify-content:space-between;margin-top:5px"><span class="t3">' + v[1] + '</span><span class="t3">' + v[2] + '</span></div></div>').join('') + '</div>' +
+    sec('ЗАКРЫТЫ') +
+    '<div class="g2" data-z="4">' + [['УСЛОВИЯ ОТМЕНЫ ИДЕИ', 'уровень 48'], ['ПРИБЫЛЬ НЕ ОПРАВДЫВАЕТ НАРУШЕНИЕ ПЛАНА', 'уровень 55']]
+      .map(v => '<div class="sk lk" style="height:auto;padding:10px"><div class="ph" style="height:60px">✦</div><div class="h2" style="margin-top:7px;font-size:8px;color:var(--tx3)">' + v[0] + '</div><div class="t3" style="margin-top:5px">откроется на ' + v[1] + '</div></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Карты не дают преимущества в оценке и не покупаются. Они — язык твоих принципов.</div></div>', 'КОЛЛЕКЦИЯ'),
+  zones: [['1', 'Топ-бар', 'sticky'], ['2', 'Фильтры типов карт', 'wrap'], ['3', 'Сетка открытых карт 2 в ряд', 'клетка 177×128'], ['4', 'Закрытые карты с условием', 'та же сетка'], ['5', 'Правило «нет pay-to-win»', 'h 44']],
+  rules: [['§6', 'Три типа карт: чтение, решение, защита'], ['§6', 'Арт — один объект в центре, без сцен и персонажей'], ['§13', 'Карты не продаются и не влияют на оценку']],
+  states: ['Список', 'Фильтр по типу', 'Пусто (новичок)'], jumps: ['7.2', '7.3', '3.1']
+});
+
+add({
+  id: '7.2', grp: '6 · КОЛЛЕКЦИЯ', title: 'Карта навыка · деталь',
+  desc: 'Мастерство растёт только от применения в сценариях, а не от покупок.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>КАРТА РЕШЕНИЯ</span><span>МАСТЕРСТВО 2/3</span></div><div class="bar c"><i style="width:66%"></i></div></div><div class="ico">⚑</div></div>' +
+    '<div class="card" data-z="2" style="align-items:center;text-align:center"><div class="ph" style="height:118px;width:118px;margin:0 auto">АРТ 118×118<br>объект в центре</div>' +
+    '<div class="big" style="margin-top:10px">НЕТ ПОДТВЕРЖДЕНИЯ — НЕТ СДЕЛКИ</div>' +
+    '<div class="t" style="margin-top:5px">Гипотеза без доказательства стоит ровно столько, сколько ты за неё заплатишь.</div></div>' +
+    '<div class="g2" data-z="3">' + [kv('ТИП', 'Решение'), kv('МАСТЕРСТВО', '2 / 3'), kv('ПРИМЕНЕНИЙ', '17'), kv('СР. КАЧЕСТВО', '74')].join('') + '</div>' +
+    sec('КОГДА ПРИМЕНЯТЬ') +
+    '<div class="col" data-z="4">' + ['Сигнал есть, но второго подтверждения нет', 'Старший таймфрейм противоречит идее', 'Социальный фон заменяет данные']
+      .map(v => '<div class="li"><div class="lead">▸</div><div class="mid"><div class="a">' + v + '</div></div></div>').join('') + '</div>' +
+    sec('ПРОГРЕСС МАСТЕРСТВА') +
+    '<div class="card" data-z="5">' + [['Уровень 1 · применить 3 раза', 1], ['Уровень 2 · качество ≥ 70 в 5 сценариях', 1], ['Уровень 3 · применить против 3 разных угроз', 0]]
+      .map(v => '<div class="row" style="align-items:center;gap:9px;padding:4px 0"><span class="node ' + (v[1] ? 'done' : 'lock') + '">' + (v[1] ? '✓' : '·') + '</span><span class="t" style="flex:1;color:' + (v[1] ? 'var(--tx)' : 'var(--tx3)') + '">' + v[0] + '</span></div>').join('') +
+    '<div class="t3" style="margin-top:6px">2 из 3 угроз: Phantom, FOMO Wraith</div></div>' +
+    sec('СВЯЗАННОЕ') +
+    '<div class="row w" data-z="6"><span class="tag cy">ГЛАВА 2 · ПОДТВЕРЖДЕНИЕ</span><span class="tag mg">FAKE BREAKOUT PHANTOM</span><span class="tag">ПРАВИЛО: ТОЛЬКО ДОКАЗАТЕЛЬСТВА</span></div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="row" data-z="7"><div class="btn gho" style="flex:1">В теорию</div><div class="btn pri" style="flex:1">Тренировать</div></div>', null),
+  zones: [['1', 'Топ-бар с мастерством', 'h 40'], ['2', 'Карта: арт 118×118 в центре + имя + формулировка', 'ш 362, h 240'], ['3', 'Мета 2×2', 'клетка 177×46'], ['4', 'Когда применять', 'h 48/строка'], ['5', 'Лестница мастерства 1–3', 'h 112'], ['6', 'Связи: глава, угроза, правило', 'wrap'], ['7', 'Действия', 'sticky, h 40']],
+  rules: [['§6', 'Формулировка карты — переносимое правило, а не индикатор'], ['§13', 'Мастерство нельзя ускорить покупкой']],
+  states: ['Мастерство 1/2/3', 'Закрытая карта'], jumps: ['5.3', '4.1', '7.1']
+});
+
+add({
+  id: '7.3', grp: '6 · КОЛЛЕКЦИЯ', title: 'Правила решений',
+  desc: 'Семь правил из §9 — модификаторы сессии, которые меняют правила оценки.',
+  render: () => screen(
+    topbar() +
+    '<div class="card q" data-z="2"><div class="lbl">ПРАВИЛО</div><div class="t" style="margin-top:5px">Правило не даёт бонусов. Он меняет веса критериев и делает дисциплину измеримой.</div></div>' +
+    '<div class="col" data-z="3">' + [['СНАЧАЛА РИСК', 'Риск 30 · действие 15', 'on'], ['ТОЛЬКО ДОКАЗАТЕЛЬСТВА', 'Доказательства 30', ''], ['ШУМОВОЙ КАРАНТИН', 'Соцфон не учитывается', ''], ['НЕ ВХОДИТЬ — ТОЖЕ РЕШЕНИЕ', 'Отказ оценивается наравне', ''], ['СОХРАНИТЬ СИСТЕМУ', 'Дисциплина 25', ''], ['ПОСЛЕ УБЫТКА', 'Контекст и риск выше', ''], ['ПРОВЕРКА УВЕРЕННОСТИ', 'Нужно обоснование выбора', '']]
+      .map(v => '<div class="li"' + (v[2] ? ' style="border-color:rgba(200,241,53,.45)"' : '') + '><div class="lead">◈</div><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag' + (v[2] ? ' ac' : '') + '">' + (v[2] ? 'АКТИВЕН' : 'ВЫБРАТЬ') + '</span></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="4"><div class="t3">Правило выбирается до старта сессии и не меняется внутри сценария. В турнире правило один для всех.</div></div>', 'КОЛЛЕКЦИЯ'),
+  zones: [['1', 'Топ-бар', 'sticky'], ['2', 'Объяснение механики', 'h 74'], ['3', 'Семь правил списком', 'h 48/строка'], ['4', 'Ограничение смены правила', 'h 50']],
+  rules: [['§9', 'Правило — часть формулы сценария'], ['§14', 'В турнире правило одинаков для всех участников']],
+  states: ['Выбран', 'Не выбран', 'Задан системой (турнир/проверка)'], jumps: ['4.1', '7.1']
+});
+
+/* ---------------- 8. ЖУРНАЛ ---------------- */
+add({
+  id: '8.1', grp: '7 · ЖУРНАЛ РЕШЕНИЙ', title: 'Повторяющиеся паттерны',
+  desc: 'Журнал фиксирует поведение, а не результат. Каждый паттерн ведёт к исправления.',
+  render: () => screen(
+    topbar() +
+    '<div class="card q" data-z="2"><div class="h2">ТЫ НЕ СЛУЧАЙНЫЙ. ТЫ ПОСЛЕДОВАТЕЛЬНЫЙ.</div><div class="t" style="margin-top:5px">За 40 решений система нашла 3 устойчивых паттерна.</div></div>' +
+    '<div class="row w" data-z="3"><span class="tag rd">КРИТИЧНЫЕ 1</span><span class="tag am">ЗНАЧИМЫЕ 2</span><span class="tag">МЕЛКИЕ 4</span><span class="tag gr">ИСПРАВЛЕННЫЕ 2</span></div>' +
+    sec('ПАТТЕРНЫ') +
+    '<div class="col" data-z="4">' + [['Решение до проверки старшего TF', 'E-007 · 5× · последний раз 2 ч назад', 'rd', 'FIX 2/3'], ['Вход после одной новости', 'E-012 · 3× · 1 д назад', 'am', 'FIX 0/3'], ['Смена плана после убытка', 'E-021 · 3× · 4 д назад', 'am', 'FIX 1/3'], ['Отказ от ожидания без причины', 'E-004 · 2× · 6 д назад', '', 'НАБЛЮДЕНИЕ'], ['Недоценка слиппажа', 'E-030 · исправлено', 'gr', '✓ 3/3']]
+      .map(v => '<div class="li"><div class="lead">' + (v[2] === 'gr' ? '✓' : '⚠') + '</div><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag ' + v[2] + '">' + v[3] + '</span></div>').join('') + '</div>' +
+    sec('ДИСЦИПЛИНА ПО КРИТЕРИЯМ', 'ПОСЛЕДНИЕ 20') +
+    '<div class="card" data-z="5">' + [['Учёт контекста', 82], ['Доказательства', 74], ['Выбор действия', 61], ['Риск', 70], ['Дисциплина', 55]]
+      .map(v => '<div class="row" style="align-items:center;gap:9px;margin-bottom:7px"><span class="t" style="flex:1">' + v[0] + '</span><span class="bar ' + (v[1] < 60 ? 'rd' : v[1] > 79 ? 'gr' : '') + '" style="width:110px"><i style="width:' + v[1] + '%"></i></span><span class="lbl" style="width:24px;text-align:right">' + v[1] + '</span></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="6"><div class="t3">Журнал не считает прибыль. Он считает, сколько раз ты нарушил свой же план.</div></div>', 'ЕЩЁ'),
+  zones: [['1', 'Топ-бар', 'sticky'], ['2', 'Сводка поведения', 'h 82'], ['3', 'Фильтры серьёзности', 'wrap'], ['4', 'Список паттернов с кодом и повторами', 'h 48/строка'], ['5', 'Дисциплина по 5 критериям', 'h 132'], ['6', 'Принцип журнала', 'h 44']],
+  rules: [['§12', 'Журнал фиксирует повторяющиеся паттерны поведения'], ['§10', 'Никакого виртуального PnL в аналитике'], ['§16', 'Формулировки без унижения игрока']],
+  states: ['Есть паттерны', 'Данных мало (<10 решений)', 'Всё исправлено'], jumps: ['8.2', '8.3', '12.1']
+});
+
+add({
+  id: '8.2', grp: '7 · ЖУРНАЛ РЕШЕНИЙ', title: 'Паттерн и исправление',
+  desc: 'Каждый паттерн имеет причину, карты-контрмеры и конкретную миссию из 3 сценариев.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>E-007</span><span>КРИТИЧНЫЙ · 5 ПОВТОРОВ</span></div><div class="bar rd"><i style="width:66%"></i></div></div><div class="ico">⚑</div></div>' +
+    '<div data-z="2"><div class="big">РЕШЕНИЕ ДО ПРОВЕРКИ СТАРШЕГО ТАЙМФРЕЙМА</div>' +
+    '<div class="t" style="margin-top:5px">Ты видишь возможность и боишься её проверить, чтобы она не перестала быть возможностью.</div></div>' +
+    '<div class="g2" data-z="3">' + [kv('ПОВТОРОВ', '5'), kv('СР. КАЧЕСТВО', '46'), kv('ПОСЛЕДНИЙ', '2 ч назад'), kv('КРИТЕРИЙ', 'Контекст')].join('') + '</div>' +
+    sec('ПРИЧИНА') +
+    '<div class="card" data-z="4"><div class="t">В 4 из 5 случаев решение принято в первые 8 секунд после появления ситуации и при открытой вкладке «Соцфон».</div></div>' +
+    sec('СВЯЗАННЫЕ УГРОЗЫ И КАРТЫ') +
+    '<div class="row w" data-z="5"><span class="tag mg">FAKE BREAKOUT PHANTOM</span><span class="tag mg">FOMO WRAITH</span><span class="tag cy">ПРОВЕРЬ СТАРШИЙ TF</span><span class="tag cy">НЕТ ПОДТВЕРЖДЕНИЯ</span></div>' +
+    sec('ИСПРАВЛЕНИЕ', '2 ИЗ 3') +
+    '<div class="card" data-z="6">' + [['Сценарий с правилом «Только доказательства»', 1], ['Сценарий с конфликтом таймфреймов', 1], ['Сценарий без вкладки «Соцфон»', 0]]
+      .map(v => '<div class="row" style="align-items:center;gap:9px;padding:4px 0"><span class="node ' + (v[1] ? 'done' : 'cur') + '">' + (v[1] ? '✓' : '·') + '</span><span class="t" style="flex:1">' + v[0] + '</span></div>').join('') +
+    '<div class="bar" style="margin-top:6px"><i style="width:66%"></i></div></div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="row" data-z="7"><div class="btn gho" style="flex:1">История</div><div class="btn pri" style="flex:2">Продолжить fix-миссию</div></div>', null),
+  zones: [['1', 'Топ-бар с кодом ошибки', 'h 40'], ['2', 'Название и трактовка', 'h 76'], ['3', 'Метрики паттерна 2×2', 'клетка 177×46'], ['4', 'Корневая причина', 'h 74'], ['5', 'Связанные угрозы и карты', 'wrap'], ['6', 'Чек-лист исправления + прогресс', 'h 118'], ['7', 'Действия', 'sticky, h 40']],
+  rules: [['§12', 'Повторяющиеся ошибки ведут к целевой тренировке'], ['Метрики', 'Геймификация за анализ ошибок, не за частоту сделок']],
+  states: ['Миссия активна', 'Миссия завершена', 'Паттерн вернулся'], jumps: ['4.1', '8.3', '8.1']
+});
+
+add({
+  id: '8.3', grp: '7 · ЖУРНАЛ РЕШЕНИЙ', title: 'История решений',
+  desc: 'Каждое решение с версией данных и правилом. Можно пересмотреть разбор.',
+  render: () => screen(
+    topbar() +
+    '<div class="row w" data-z="2"><span class="tag ac">ВСЕ 40</span><span class="tag">ПРАКТИКА 31</span><span class="tag">ОБУЧЕНИЕ 6</span><span class="tag">ТУРНИР 3</span><span class="tag">КАЧЕСТВО ↓</span></div>' +
+    '<div class="col" data-z="3">' + [['Сценарий 14 · Ложный пробой', 'Ждать ретест · v2.4 · Сначала риск', 78, 'ac'], ['Сценарий 13 · Новостной выброс', 'Вне рынка · v2.4 · Шумовой карантин', 92, 'gr'], ['Турнир · Раунд 2', 'Войти с половинным риском · v2.4', 64, 'am'], ['Сценарий 12 · Охота за стопами', 'Усреднить · v2.3 · без правила', 22, 'rd'], ['Обучение · глава 4 урок 4', 'Практика · верно', 0, '']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div>' + (v[2] ? '<span class="tag ' + v[3] + '">' + v[2] + '</span>' : '<span class="tag">—</span>') + '</div>').join('') + '</div>' +
+    '<div class="card dash" data-z="4"><div class="t3">История неизменяема. Она хранит версию датасета и правил оценки на момент решения.</div></div>' +
+    '<div class="btn gho" data-z="5">Экспорт истории</div>', 'ЕЩЁ'),
+  zones: [['1', 'Топ-бар', 'sticky'], ['2', 'Фильтры и сортировка', 'wrap'], ['3', 'Список решений', 'h 48/строка'], ['4', 'Гарантия неизменяемости', 'h 44'], ['5', 'Экспорт', 'h 40']],
+  rules: [['§15', 'Хранятся версия датасета, правила оценки и версия контента'], ['§12', 'История — основа профиля поведения']],
+  states: ['Список', 'Пусто', 'Фильтр по режиму'], jumps: ['4.12', '8.1']
+});
+
+/* ---------------- 9. ТУРНИРЫ ---------------- */
+add({
+  id: '9.1', grp: '8 · ТУРНИРЫ', title: 'Список турниров',
+  desc: 'Асинхронный PvP: все играют один и тот же датасет в окне времени.',
+  render: () => screen(
+    topbar() +
+    '<div class="card q" data-z="2"><div class="row" style="justify-content:space-between;align-items:center"><div><div class="lbl">АКТИВНЫЙ ТУРНИР</div><div class="h2" style="margin-top:4px">С��ХОЙ ОБЪЁМ · НЕДЕЛЯ 37</div><div class="t3" style="margin-top:4px">Закрытие через 2 д 14 ч · 5 сценариев</div></div><span class="tag cy">ВЫ В ИГРЕ</span></div>' +
+    '<div class="bar c" style="margin-top:9px"><i style="width:60%"></i></div><div class="t3" style="margin-top:5px">Пройдено 3 из 5</div>' +
+    '<div class="btn pri" style="margin-top:9px">Продолжить раунд 4</div></div>' +
+    sec('ОТКРЫТЫЕ ЗАЯВКИ') +
+    '<div class="col" data-z="3">' + [['ДИСЦИПЛИНА ПОСЛЕ УБЫТКА', 'Правило задан · старт через 6 ч', 'БЕСПЛАТНО'], ['WEB3-ГИГИЕНА', '8 сценариев · таймер скрыт', 'БЕСПЛАТНО'], ['ЛИГА СЕЗОНА · ДИВИЗИОН 2', 'требует уровень 30+', 'ДОСТУПНО']]
+      .map(v => '<div class="li"><div class="lead">⚔</div><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag">' + v[2] + '</span></div>').join('') + '</div>' +
+    sec('ЗАВЕРШЁННЫЕ') +
+    '<div class="col" data-z="4">' + [['ЛОЖНЫЕ ПРОБОИ · НЕДЕЛЯ 36', 'Место 42 из 1 208 · качество 71'], ['НОВОСТНОЙ ШУМ · НЕДЕЛЯ 35', 'Место 88 из 940 · качество 63']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag">ИТОГИ</span></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Скорость не даёт очков. Она только разводит равные результаты.</div></div>', 'ЕЩЁ'),
+  zones: [['1', 'Топ-бар', 'sticky'], ['2', 'Активный турнир + прогресс + CTA', 'ш 362, h 150'], ['3', 'Открытые заявки', 'h 48/строка'], ['4', 'Завершённые турниры', 'h 48/строка'], ['5', 'Правило о скорости', 'h 40']],
+  rules: [['§12', 'PvP асинхронный, без прямой боёвой механики'], ['§12', 'Скорость — только тайбрейкер'], ['NO', 'Таймер не создаёт панику: может быть скрыт']],
+  states: ['Есть активный', 'Нет активных', 'Заблокировано уровнем'], jumps: ['9.2', '9.3', '9.4']
+});
+
+add({
+  id: '9.2', grp: '8 · ТУРНИРЫ', title: 'Брифинг турнира',
+  desc: 'Фиксированный датасет и хэш до старта — гарантия равных условий.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>СУХОЙ ОБЪЁМ</span><span>НЕДЕЛЯ 37</span></div><div class="bar c"><i style="width:60%"></i></div></div><div class="ico">?</div></div>' +
+    '<div class="card q" data-z="2"><div class="h">ОДИН ДАТАСЕТ НА ВСЕХ.<br>ОТГОВОРКИ ЗАКОНЧИЛИСЬ.</div></div>' +
+    '<div class="g2" data-z="3">' + [kv('СЦЕНАРИЕВ', '5'), kv('ДАТАСЕТ', 'v2.4-T37'), kv('ПРАВИЛО', 'Сначала риск'), kv('ТАЙМЕР', 'скрыт'), kv('ВКЛАДОК', '5 из 9'), kv('ПОПЫТКИ', '1')].join('') + '</div>' +
+    sec('ЦЕЛОСТНОСТЬ') +
+    '<div class="card" data-z="4"><div class="row" style="justify-content:space-between"><span class="t">Хэш скрытого будущего</span><span class="tag gr">ОПУБЛИКОВАН</span></div>' +
+    '<div class="t3" style="margin-top:6px;word-break:break-all">7c19b0e4a41f8e2c…0d92 · опубликован до открытия окна</div></div>' +
+    sec('КАК ОПРЕДЕЛЯЕТСЯ МЕСТО') +
+    '<div class="col" data-z="5">' + [['1. Качество решений', 'сумма 0–100 по 5 сценариям'], ['2. Соблюдение правила', 'штраф за нарушение'], ['3. Работа с доказательствами', 'какие вкладки были открыты'], ['4. Скорость', 'только при полном равенстве']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div></div>').join('') + '</div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="btn pri" data-z="6">Начать раунд 4</div>', null),
+  zones: [['1', 'Топ-бар турнира', 'h 40'], ['2', 'Заголовок-девиз', 'h 72'], ['3', 'Параметры 2×3', 'клетка 177×46'], ['4', 'Хэш и целостность', 'h 74'], ['5', 'Порядок тайбрейкеров 1–4', 'h 48/строка'], ['6', 'Старт раунда', 'sticky, h 40']],
+  rules: [['§12', 'Фиксированный набор ситуаций и окно времени'], ['§15', 'Хэш будущего публикуется до старта'], ['§13', 'Запрещено продавать дополнительные попытки']],
+  states: ['До старта', 'В процессе', 'Окно закрыто'], jumps: ['4.3', '9.3']
+});
+
+add({
+  id: '9.3', grp: '8 · ТУРНИРЫ', title: 'Лидерборд',
+  desc: 'Сортировка по качеству. Каждая строка показывает, почему место именно такое.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>ЛИДЕРБОРД</span><span>1 208 УЧАСТНИКОВ</span></div><div class="bar c"><i style="width:100%"></i></div></div><div class="ico">⚑</div></div>' +
+    '<div class="row w" data-z="2"><span class="tag ac">ОБЩИЙ</span><span class="tag">ДИВИЗИОН 2</span><span class="tag">ДРУЗЬЯ</span></div>' +
+    '<div class="col" data-z="3">' + [[1, 'volume_monk', 468, 'Правило ✓ · доказательства 5/5', ''], [2, 'no_entry_no_pain', 465, 'Правило ✓ · доказательства 5/5 · быстрее', ''], [3, 'anti_fomo', 465, 'Правило ✓ · доказательства 4/5', ''], [41, 'flat_is_fine', 356, 'Правило ✓ · доказательства 3/5', ''], [42, 'ВЫ · em7hmz64jl', 354, 'Правило ✗ 1 нарушение · доказательства 3/5', 'me'], [43, 'liquidity_ghost', 351, 'Правило ✓ · доказательства 2/5', '']]
+      .map(v => '<div class="li"' + (v[4] ? ' style="border-color:rgba(200,241,53,.5)"' : '') + '><div class="lead">' + v[0] + '</div><div class="mid"><div class="a">' + v[1] + '</div><div class="b">' + v[3] + '</div></div><span class="tag' + (v[4] ? ' ac' : '') + '">' + v[2] + '</span></div>').join('') + '</div>' +
+    sec('ПОРЯДОК СРАВНЕНИЯ') +
+    '<div class="card" data-z="4"><div class="row w"><span class="tag ac">1 КАЧЕСТВО</span><span class="tag">2 ПРАВИЛО</span><span class="tag">3 ДОКАЗАТЕЛЬСТВА</span><span class="tag">4 СКОРОСТЬ</span></div>' +
+    '<div class="t3" style="margin-top:7px">Скорость влияет только при полном совпадении трёх предыдущих критериев — пункты 2 и 3 развели места 41 и 42.</div></div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Награды турнира косметические и контентные. Никаких выводимых активов.</div></div>', null),
+  zones: [['1', 'Топ-бар', 'h 40'], ['2', 'Область сравн��ния', 'wrap'], ['3', 'Строки лидерборда, своя — подсвечена', 'h 48/строка'], ['4', 'Объяснение тайбрейкеров', 'h 88'], ['5', 'Ограничение наград', 'h 44']],
+  rules: [['§12', 'Порядок: качество → правило → доказательства → скорость'], ['§14', 'Награды невыводимые']],
+  states: ['Итоговый', 'Предварительный', 'Скрыт до закрытия окна'], jumps: ['9.4', '9.1']
+});
+
+add({
+  id: '9.4', grp: '8 · ТУРНИРЫ', title: 'Мой результат',
+  desc: 'Разбор по раундам с доступом к источникам после закрытия окна.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>МОЙ РЕЗУЛЬТАТ</span><span>МЕСТО 42 / 1 208</span></div><div class="bar c"><i style="width:97%"></i></div></div><div class="ico">⤴</div></div>' +
+    '<div class="card q" data-z="2"><div class="row" style="align-items:center;gap:12px"><div class="score"><div class="dial" style="--p:71"><span>354</span></div></div><div style="flex:1"><div class="h2">ТОП 4% ПО КАЧЕСТВУ</div><div class="t3" style="margin-top:4px">Одно нарушение правила стоило тебе одного места.</div></div></div></div>' +
+    sec('ПО РАУНДАМ') +
+    '<div class="col" data-z="3">' + [['Раунд 1 · Ложный пробой', 78, '✓ правило', 'ac'], ['Раунд 2 · Охота за стопами', 64, '✗ риск выше лимита', 'rd'], ['Раунд 3 · Новостной шум', 88, '✓ правило', 'gr'], ['Раунд 4 · Сухой объём', 62, '✓ правило', 'am'], ['Раунд 5 · Стена ликвидности', 62, '✓ правило', 'am']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[2] + '</div></div><span class="tag ' + v[3] + '">' + v[1] + '</span></div>').join('') + '</div>' +
+    sec('НАГРАДЫ') +
+    '<div class="row w" data-z="4"><span class="tag ac">+180 XP</span><span class="tag am">+40 МОНЕТ</span><span class="tag vi">ЗНАК: СУХОЙ ОБЪЁМ · ТОП 5%</span></div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Источники всех 5 сценариев открыты после закрытия окна турнира.</div></div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="row" data-z="6"><div class="btn gho" style="flex:1">Поделиться</div><div class="btn pri" style="flex:1">Разбор раундов</div></div>', null),
+  zones: [['1', 'Топ-бар с местом', 'h 40'], ['2', 'Сводка с циферблатом', 'h 108'], ['3', 'Разбивка по 5 раундам', 'h 48/строка'], ['4', 'Награды (косметика)', 'wrap'], ['5', 'Доступ к источникам', 'h 44'], ['6', 'Действия', 'sticky, h 40']],
+  rules: [['§15', 'Источники раскрываются после закрытия окна'], ['§14', 'Награды — только косметика и контент']],
+  states: ['Завершён', 'Незавершён', 'Дисквалификация'], jumps: ['4.12', '9.3', '9.1']
+});
+
+/* ---------------- 10. МАГАЗИН ---------------- */
+add({
+  id: '10.1', grp: '9 · МАГАЗИН', title: 'Магазин',
+  desc: 'Только косметика, расширения контента и удобство. Ничего, что меняет оценку.',
+  render: () => screen(
+    topbar() +
+    '<div class="row w" data-z="2"><span class="tag ac">МАГАЗИН</span><span class="tag">ПАСС</span><span class="tag">ПОДПИСКА</span><span class="tag">АВТОРЫ</span><span class="tag">КОШЕЛЁК</span></div>' +
+    sec('КОСМЕТИКА') +
+    '<div class="g2" data-z="3">' + [['РАМКА КАРТ «СУХОЙ ОБЪЁМ»', '240 ◉'], ['АВАТАР «СПОКОЙНЫЙ СКЕЛЕТ»', '180 ◉'], ['ТЕМА ИНТЕРФЕЙСА «ГАЗЕТА»', '320 ◉'], ['ШТАМП ЖУРНАЛА «НЕ ВИНОВАТ»', '90 ◉']]
+      .map(v => '<div class="card"><div class="ph" style="height:70px">ПРЕВЬЮ</div><div class="h2" style="margin-top:7px;font-size:8px">' + v[0] + '</div><div class="btn sm" style="margin-top:7px">' + v[1] + '</div></div>').join('') + '</div>' +
+    sec('РАСШИРЕНИЯ КОНТЕНТА') +
+    '<div class="col" data-z="4">' + [['НАБОР СЦЕНАРИЕВ «ЛИКВИДНОСТЬ 2019–21»', '+12 исторических ситуаций', '390 ◉'], ['НАБОР СЦЕНАРИЕВ «WEB3-ЛОВУШКИ»', '+10 ситуаций · требует главу 7', 'ЗАКРЫТО'], ['ДОП. ВКЛАДКА НА СЦЕНАРИЙ', 'разовое открытие данных', '25 ◉']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag' + (v[2] === 'ЗАКРЫТО' ? '' : ' am') + '">' + v[2] + '</span></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="5"><div class="lbl">ЗАПРЕЩЕНО ПРОДАВАТЬ</div>' +
+    '<div class="col" style="margin-top:7px;gap:4px">' + ['готовые правильные ответы', 'буст оценки и рейтинга', 'повышенные лимиты риска', 'базовые защитные знания', 'лутбоксы, влияющие на качество', 'сигналы и прогнозы']
+      .map(v => '<div class="t3">✗ ' + v + '</div>').join('') + '</div></div>' +
+    '<div class="card dash" data-z="6"><div class="t3">Все покупки косметические. Разочарование — бесплатно.</div></div>', 'ЕЩЁ'),
+  zones: [['1', 'Топ-бар с балансом', 'sticky'], ['2', 'Вкладки магазина', 'wrap'], ['3', 'Косметика 2 в ряд', 'клетка 177×142'], ['4', 'Расширения контента', 'h 48/строка'], ['5', 'Список запретов (§13)', 'h 138'], ['6', 'Сатирическая подпись', 'h 40']],
+  rules: [['§13', 'Монетизация: косметика, контент, удобство'], ['NO', 'Нельзя продавать ответы, бусты, лимиты риска, сигналы'], ['§13', 'Защитные знания всегда бесплатны']],
+  states: ['Каталог', 'Недостаточно монет', 'Куплено'], jumps: ['10.2', '10.3', '10.5']
+});
+
+add({
+  id: '10.2', grp: '9 · МАГАЗИН', title: 'Сигнал-пасс (сезон)',
+  desc: 'Сезонный трек наград — только косметика и контент, прогресс от качества решений.',
+  render: () => screen(
+    topbar() +
+    '<div class="card q" data-z="2"><div class="row" style="justify-content:space-between;align-items:center"><div><div class="lbl">СИГНАЛ-ПАСС</div><div class="h2" style="margin-top:4px">СЕЗОН 1 · «СУХОЙ ОБЪЁМ»</div><div class="t3" style="margin-top:4px">До конца сезона 21 день</div></div><span class="tag ac">12 / 30</span></div>' +
+    '<div class="bar" style="margin-top:9px"><i style="width:40%"></i></div></div>' +
+    sec('ТРЕК НАГРАД', 'БЕСПЛАТНО / PRO') +
+    '<div class="card" data-z="3">' + [[10, 'Рамка карт', '✓', '✓'], [12, '80 монет', '✓', '✓'], [14, 'Аватар', '✗', '○'], [16, 'Набор сценариев', '✗', '○'], [18, 'Штамп журнала', '○', '○']]
+      .map(v => '<div class="row" style="align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid var(--bd)"><span class="node ' + (v[2] === '✓' ? 'done' : 'lock') + '">' + v[0] + '</span><span class="t" style="flex:1">' + v[1] + '</span><span class="tag">БЕСПЛ ' + v[2] + '</span><span class="tag vi">PRO ' + v[3] + '</span></div>').join('') + '</div>' +
+    '<div class="g2" data-z="4">' + [kv('ЦЕНА PRO-ПАССА', '490 ₽'), kv('ПРОГРЕСС ЗА', 'качество'), kv('НЕ ВЛИЯЕТ НА', 'оценку'), kv('СГОРАЕТ', 'нет, контент остаётся')].join('') + '</div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Пасс не ускоряет обучение и не повышает оценку. Он только меняет внешний вид и объём контента.</div></div>' +
+    '<div class="btn pri" data-z="6">Оформить PRO-пасс · 490 ₽</div>', 'ЕЩЁ'),
+  zones: [['1', 'Топ-бар', 'sticky'], ['2', 'Сезонная шапка 12/30', 'h 130'], ['3', 'Трек наград с двумя дорожками', 'h 46/уровень'], ['4', 'Условия 2×2', 'клетка 177×46'], ['5', 'Анти-pay-to-win плашка', 'h 50'], ['6', 'Покупка', 'sticky, h 40']],
+  rules: [['§13', 'Пасс не влияет на качество и рейтинг'], ['§14', 'Внутренняя валюта невыводима']],
+  states: ['Бесплатный трек', 'PRO активен', 'Сезон завершён'], jumps: ['10.3', '10.1']
+});
+
+add({
+  id: '10.3', grp: '9 · МАГАЗИН', title: 'Подписка PRO',
+  desc: 'Подписка даёт количество и аналитику, но не преимущество в оценке.',
+  render: () => screen(
+    topbar() +
+    '<div class="card q" data-z="2"><div class="h">PRO НЕ ДЕЛАЕТ ТЕБЯ УМНЕЕ.<br>ОН ДАЁТ БОЛЬШЕ МАТЕРИАЛА ДЛЯ ОШИБОК.</div></div>' +
+    '<div class="g2" data-z="3">' + [['МЕСЯЦ', '199 ₽', ''], ['ГОД', '1 490 ₽', 'ac']]
+      .map(v => '<div class="card" style="' + (v[2] ? 'border-color:rgba(200,241,53,.45)' : '') + '"><div class="lbl">' + v[0] + '</div><div class="big" style="margin-top:5px">' + v[1] + '</div><div class="btn ' + (v[2] ? 'pri' : 'gho') + ' sm" style="margin-top:8px">Выбрать</div></div>').join('') + '</div>' +
+    sec('ВХОДИТ') +
+    '<div class="col" data-z="4">' + [['Без дневного лимита сценариев', 'gr'], ['Расширенная аналитика журнала', 'gr'], ['Доступ к архиву сезонных наборов', 'gr'], ['Косметические рамки и темы', 'gr']]
+      .map(v => '<div class="li"><div class="lead">✓</div><div class="mid"><div class="a">' + v[0] + '</div></div></div>').join('') + '</div>' +
+    sec('НЕ ВХОДИТ НИКОГДА') +
+    '<div class="col" data-z="5">' + ['Правильные ответы и подсказки', 'Повышение оценки или места в турнире', 'Приоритет в лидерборде']
+      .map(v => '<div class="li"><div class="lead">✗</div><div class="mid"><div class="a" style="color:var(--tx3)">' + v + '</div></div></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="6"><div class="t3">Отмена в любое время. Купленный контент остаётся доступным.</div></div>', 'ЕЩЁ'),
+  zones: [['1', 'Топ-бар', 'sticky'], ['2', 'Заголовок-девиз', 'h 76'], ['3', 'Два тарифа', 'клетка 177×112'], ['4', 'Список включённого', 'h 48/строка'], ['5', 'Список исключений', 'h 48/строка'], ['6', 'Условия отмены', 'h 44']],
+  rules: [['§13', 'Подписка не влияет на качество решений'], ['Конкуренты', 'Отказ от модели дневных квот как главного барьера']],
+  states: ['Нет подписки', 'Активна', 'Отменена (доступ до даты)'], jumps: ['10.1', '10.5']
+});
+
+add({
+  id: '10.4', grp: '9 · МАГАЗИН', title: 'Авторские наборы',
+  desc: 'Не открытый магазинплейс: только модерируемые сценарные наборы с раскрытой методикой.',
+  render: () => screen(
+    topbar() +
+    '<div class="card q" data-z="2"><div class="lbl">СТАТУС ФУНКЦИИ</div><div class="t" style="margin-top:5px">В MVP раздел виден, но наполняется только редакцией. Открытые загрузки выключены.</div>' +
+    '<div class="row" style="margin-top:8px;gap:7px"><span class="tag am">ПОСЛЕ MVP</span><span class="tag">МОДЕРАЦИЯ ОБЯЗАТЕЛЬНА</span></div></div>' +
+    sec('РЕДАКЦИОННЫЕ НАБОРЫ') +
+    '<div class="col" data-z="3">' + [['ЛИКВИДНОСТЬ 2019–21', '12 ситуаций · методика открыта', 'КУПЛЕНО'], ['НОВОСТНЫЕ ШОКИ', '10 ситуаций · источники указаны', '390 ◉'], ['WEB3-ЛОВУШКИ', '10 ситуаций · требует главу 7', 'ЗАКРЫТО']]
+      .map(v => '<div class="li"><div class="lead">▤</div><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag">' + v[2] + '</span></div>').join('') + '</div>' +
+    sec('ТРЕБОВАНИЯ К ЛЮБОМУ НАБОРУ') +
+    '<div class="col" data-z="4">' + ['Исторические данные с указанием источника и t₀', 'Зафиксированное продолжение и его хэш', 'Правила оценки без авторской импровизации', 'Запрет на сигналы и прогнозы']
+      .map(v => '<div class="li"><div class="lead">◈</div><div class="mid"><div class="a">' + v + '</div></div></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Открытый магазинплейс исключён из MVP по §17.</div></div>', 'ЕЩЁ'),
+  zones: [['1', 'Топ-бар', 'sticky'], ['2', 'Статус функции', 'h 100'], ['3', 'Список наборов', 'h 48/строка'], ['4', 'Требования к контенту', 'h 48/строка'], ['5', 'Ограничение MVP', 'h 40']],
+  rules: [['§17', 'Открытый магазинплейс авторов — вне MVP'], ['§15', 'Любой набор обязан хранить источник, t₀ и хэш']],
+  states: ['Заглушка MVP', 'Каталог активен'], jumps: ['10.1', '12.3']
+});
+
+add({
+  id: '10.5', grp: '9 · МАГАЗИН', title: 'Кошелёк и история',
+  desc: 'Внутренняя валюта невыводима. Никакого моста «прогресс → токен».',
+  render: () => screen(
+    topbar() +
+    '<div class="g2" data-z="2">' + [['МОНЕТЫ', '2 345 ◉', 'игровая, невыводимая'], ['$SIG', '128', 'вне MVP · только метка']]
+      .map(v => '<div class="card"><div class="lbl">' + v[0] + '</div><div class="big" style="margin-top:5px">' + v[1] + '</div><div class="t3" style="margin-top:4px">' + v[2] + '</div></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="3"><div class="lbl">ПРАВИЛА ЭКОНОМИКИ</div>' +
+    '<div class="col" style="margin-top:7px;gap:4px">' + ['XP и ранг нельзя передать или продать', 'Монеты тратятся только внутри игры', 'Внешний токен не входит в MVP', 'Моста «прогресс → токен» не существует']
+      .map(v => '<div class="t3">◈ ' + v + '</div>').join('') + '</div></div>' +
+    sec('ИСТОРИЯ ОПЕРАЦИЙ') +
+    '<div class="col" data-z="4">' + [['Закрытие главы 3', '+240 ◉', 'gr'], ['Турнир Неделя 36', '+40 ◉', 'gr'], ['Рамка карт «Газета»', '−320 ◉', 'rd'], ['Доп. вкладка · сценарий 14', '−25 ◉', 'rd'], ['Серия 7 дней', '+70 ◉', 'gr']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div></div><span class="tag ' + v[2] + '">' + v[1] + '</span></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Не финансовый сервис. Внутренние балансы не являются активом и не подлежат обмену.</div></div>', 'ЕЩЁ'),
+  zones: [['1', 'Топ-бар', 'sticky'], ['2', 'Два баланса', 'клетка 177×92'], ['3', 'Правила экономики', 'h 112'], ['4', 'История операций', 'h 48/строка'], ['5', 'Правовая плашка', 'h 44']],
+  rules: [['§14', 'Внутренняя валюта невыводима'], ['§14', 'Нет моста прогресса в токен']],
+  states: ['Есть баланс', 'Нулевой баланс', 'История пуста'], jumps: ['10.1', '12.3']
+});
+
+/* ---------------- 11. ПРОФИЛЬ ---------------- */
+add({
+  id: '11.1', grp: '10 · ПРОФИЛЬ', title: 'Профиль и уровень 0–99',
+  desc: 'Уровень — только индикатор опыта. Интерфейс на всех уровнях одинаков.',
+  render: () => screen(
+    topbar() +
+    '<div class="card q" data-z="2"><div class="row" style="align-items:center;gap:11px"><div class="ph" style="width:56px;height:56px">АВА</div>' +
+    '<div style="flex:1"><div class="h2">em7hmz64jl</div><div class="t3" style="margin-top:3px">Уровень 42 · Сценариев 40 · Серия 7 дней</div>' +
+    '<div class="bar" style="margin-top:7px"><i style="width:69%"></i></div><div class="t3" style="margin-top:4px">12 450 / 18 000 XP до уровня 43</div></div></div>' +
+    '<div class="t3" style="margin-top:9px">Уровень 99 не гарантирован никому. Это не цель, а граница.</div></div>' +
+    sec('КАЧЕСТВО ПО КРИТЕРИЯМ', 'СРЕДНЕЕ ЗА 40') +
+    '<div class="card" data-z="3">' + [['Учёт контекста', 82], ['Работа с доказательствами', 74], ['Выбор действия', 61], ['Управление риском', 70], ['Дисциплина', 55]]
+      .map(v => '<div class="row" style="align-items:center;gap:9px;margin-bottom:7px"><span class="t" style="flex:1">' + v[0] + '</span><span class="bar ' + (v[1] < 60 ? 'rd' : v[1] > 79 ? 'gr' : '') + '" style="width:110px"><i style="width:' + v[1] + '%"></i></span><span class="lbl" style="width:24px;text-align:right">' + v[1] + '</span></div>').join('') + '</div>' +
+    '<div class="g2" data-z="4">' + [kv('КАРТ ОТКРЫТО', '12 / 18'), kv('УГРОЗ', '14 / 32'), kv('ГЛАВ ЗАКРЫТО', '3 / 7'), kv('ИСПРАВЛЕНО ПАТТЕРНОВ', '2')].join('') + '</div>' +
+    sec('СЕЗОН И ЛИГА') +
+    '<div class="card" data-z="5"><div class="row" style="justify-content:space-between;align-items:center"><span class="t">Дивизион 2 · сезон 1</span><div class="row" style="gap:5px">' + [1, 1, 1, 0, 0].map(v => '<span class="node ' + (v ? 'done' : 'lock') + '" style="width:14px;height:14px"></span>').join('') + '</div></div>' +
+    '<div class="t3" style="margin-top:7px">Повышение дивизиона зависит от качества решений, а не от частоты игры.</div></div>' +
+    '<div class="btn gho" data-z="6">Достижения и знаки</div>', 'ЕЩЁ'),
+  zones: [['1', 'Топ-бар', 'sticky'], ['2', 'Шапка профиля: аватар 56×56 + XP', 'h 152'], ['3', 'Профиль качества по 5 критериям', 'h 132'], ['4', 'Коллекционные счётчики 2×2', 'клетка 177×46'], ['5', 'Сезон и дивизион', 'h 84'], ['6', 'Переход к достижениям', 'h 40']],
+  rules: [['§11', 'Уровни 0–99, интерфейс не меняется с уровнем'], ['§11', 'Уровень 99 не гарантирован'], ['§14', 'XP и ранг непередаваемы']],
+  states: ['Уровень средний', 'Новичок (пустые счётчики)', 'Высокий уровень'], jumps: ['11.2', '8.1', '3.1']
+});
+
+add({
+  id: '11.2', grp: '10 · ПРОФИЛЬ', title: 'Достижения и знаки',
+  desc: 'Знаки выдаются за поведение и дисциплину, не за доходность.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>ДОСТИЖЕНИЯ</span><span>9 ИЗ 24</span></div><div class="bar c"><i style="width:37%"></i></div></div><div class="ico">⤴</div></div>' +
+    sec('ПОЛУЧЕННЫЕ') +
+    '<div class="g3" data-z="2">' + [['ВНЕ РЫНКА', '10 отказов с оценкой 80+'], ['СНАЧАЛА РИСК', '20 сценариев без нарушений'], ['ЧЕСТНЫЙ ЖУРНАЛ', 'исправлен 1 паттерн'], ['СЕРИЯ 7', '7 дней подряд'], ['ГЛАВА 3', 'закрыта полностью'], ['ТОП 5%', 'турнир Неделя 37']]
+      .map(v => '<div class="ent"><div class="ph" style="height:52px">ЗНАК</div><div class="h2" style="margin-top:5px;font-size:8px">' + v[0] + '</div><div class="t3" style="margin-top:3px">' + v[1] + '</div></div>').join('') + '</div>' +
+    sec('ЗАКРЫТЫЕ') +
+    '<div class="g3" data-z="3">' + [['БЕЗ ПОВТОРОВ', '30 сценариев без E-007'], ['ВСЕ ГЛАВЫ', '7 из 7'], ['СОБИРАТЕЛЬ', '32 угрозы']]
+      .map(v => '<div class="ent lk"><div class="ph" style="height:52px">✦</div><div class="h2" style="margin-top:5px;font-size:8px;color:var(--tx3)">' + v[0] + '</div><div class="t3" style="margin-top:3px">' + v[1] + '</div></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="4"><div class="t3">Ни одно достижение не выдаётся за частоту сделок или виртуальную доходность.</div></div>', null),
+  zones: [['1', 'Топ-бар с прогрессом 9/24', 'h 40'], ['2', 'Сетка полученных 3 в ряд', 'клетка 116×108'], ['3', 'Сетка закрытых с условием', 'та же сетка'], ['4', 'Правило выдачи знаков', 'h 44']],
+  rules: [['Метрики', 'Награда за анализ ошибок, не за частоту действий'], ['§10', 'Никаких наград за виртуальный PnL']],
+  states: ['Частично', 'Пусто', 'Всё получено'], jumps: ['11.1']
+});
+
+/* ---------------- 12. ЕЩЁ / НАСТРОЙКИ / ПРАВОВОЕ ---------------- */
+add({
+  id: '12.1', grp: '11 · ЕЩЁ И НАСТРОЙКИ', title: 'Ещё · все разделы',
+  desc: 'Пятый слот навигации собирает всё, что не поместилось в 4 основных слота.',
+  render: () => screen(
+    topbar() +
+    sec('РАЗДЕЛЫ') +
+    '<div class="g2" data-z="2">' + [['☲', 'ЖУРНАЛ РЕШЕНИЙ', '3 паттерна'], ['▣', 'КОЛЛЕКЦИЯ КАРТ', '12 / 18'], ['◈', 'ПРАВИЛА', '7 доступно'], ['⚔', 'ТУРНИРЫ', '1 активный'], ['◉', 'МАГАЗИН', 'пасс 12/30'], ['☻', 'ПРОФИЛЬ', 'уровень 42']]
+      .map(v => '<div class="card"><div class="row" style="align-items:center;gap:9px"><div class="ico">' + v[0] + '</div><div style="flex:1"><div class="h2" style="font-size:8px">' + v[1] + '</div><div class="t3" style="margin-top:3px">' + v[2] + '</div></div></div></div>').join('') + '</div>' +
+    sec('СЕРВИС') +
+    '<div class="col" data-z="3">' + [['Настройки', 'язык, доступность, данные'], ['Уведомления', 'серия, турниры, урок дня'], ['Правила оценки', 'открытая методика'], ['Правовая информация', 'дисклеймеры, оферта'], ['Поддержка и обратная связь', 'ошибки в сценариях']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag">›</span></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="4"><div class="lbl">РЕШЕНИЕ ПО ИНФОРМАЦИОННОЙ АРХИТЕКТУРЕ</div><div class="t3" style="margin-top:6px">Шесть режимов ТЗ не влезают в 5 слотов. В нижней навигации остаются ежедневные сценарии использования (Главная, Обучение, Практика, Угрозы), а Журнал, Коллекция, Правила, Турниры, Магазин и Профиль — здесь и дублируются карточками на Главной.</div></div>', 'ЕЩЁ'),
+  zones: [['1', 'Топ-бар', 'sticky'], ['2', 'Сетка разделов 2×3', 'клетка 177×64'], ['3', 'Сервисные строки', 'h 48/строка'], ['4', 'Пояснение IA-решения', 'h 92']],
+  rules: [['§12', 'Все шесть режимов доступны не более чем в 2 касания'], ['§5', 'Постоянная структура навигации на всех экранах']],
+  states: ['Базовое', 'С бейджами уведомлений'], jumps: ['8.1', '7.1', '7.3', '9.1', '10.1', '11.1', '12.2', '12.3']
+});
+
+add({
+  id: '12.2', grp: '11 · ЕЩЁ И НАСТРОЙКИ', title: 'Настройки',
+  desc: 'Язык (RU-first, 10+ локалей), доступность, данные, режим тишины.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>НАСТРОЙКИ</span><span>ВЕРСИЯ 0.9 · c-118</span></div><div class="bar c"><i style="width:100%"></i></div></div><div class="ico">?</div></div>' +
+    sec('ЯЗЫК И РЕГИОН') +
+    '<div class="col" data-z="2">' + [['Язык интерфейса', 'Русский'], ['Формат дат и времени', 'DD.MM · 24ч · UTC+3'], ['Единицы цен', 'как в источнике']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag">›</span></div>').join('') + '</div>' +
+    sec('ДОСТУПНОСТЬ') +
+    '<div class="col" data-z="3">' + [['Увеличенный текст', 1], ['Сниженная анимация', 0], ['Высокий контраст', 0], ['Цветослепые палитры графика', 1], ['Отключить таймеры в турнирах', 1]]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div></div><span class="tag' + (v[1] ? ' ac' : '') + '">' + (v[1] ? 'ВКЛ' : 'ВЫКЛ') + '</span></div>').join('') + '</div>' +
+    sec('ДАННЫЕ И ПРОЗРАЧНОСТЬ') +
+    '<div class="col" data-z="4">' + [['Показывать версию датасета на экране задания', 'вкл'], ['Показывать хэш скрытого будущего', 'вкл'], ['Экспорт журнала решений', 'CSV / JSON'], ['Удалить аккаунт и данные', 'необратимо']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag">›</span></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Настройки не влияют на сложность и оценку. Отключение таймера разрешено всем.</div></div>', null),
+  zones: [['1', 'Топ-бар с версией сборки', 'h 40'], ['2', 'Язык и регион', 'h 48/строка'], ['3', 'Доступность (переключатели)', 'h 48/строка'], ['4', 'Данные и прозрачность', 'h 48/строка'], ['5', 'Гарантия нейтральности н��строек', 'h 44']],
+  rules: [['§15', 'Правила оценки и версии доступны игроку'], ['Конкуренты', 'RU-first и архитектура на 10+ локалей']],
+  states: ['Базовое', 'Режим доступности включён'], jumps: ['12.4', '12.3', '12.1']
+});
+
+add({
+  id: '12.3', grp: '11 · ЕЩЁ И НАСТРОЙКИ', title: 'Правовое и дисклеймеры',
+  desc: 'Границы продукта из §2 и §15: не терминал, не советник, не P2E.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>ПРАВОВОЕ</span><span>ОБЯЗАТЕЛЬНО К ПОКАЗУ</span></div><div class="bar c"><i style="width:100%"></i></div></div><div class="ico">⚑</div></div>' +
+    '<div class="card q" data-z="2" style="border-color:rgba(233,96,90,.45)"><div class="h">ЭТО НЕ ФИНАНСОВАЯ РЕКОМЕНДАЦИЯ.</div>' +
+    '<div class="t" style="margin-top:6px">Игра учит качеству решений на исторических данных и не даёт сигналов, прогнозов и инвестиционных советов.</div></div>' +
+    sec('ЧЕМ ПРОДУКТ НЕ ЯВЛЯЕТСЯ') +
+    '<div class="col" data-z="3">' + ['Торговым терминалом и симулятором биржи', 'Демо-счётом или брокером', 'Игрой play-to-earn с выводом средств', 'Сервисом сигналов и прогнозов', 'Казино или азартной игрой на деньги']
+      .map(v => '<div class="li"><div class="lead">✗</div><div class="mid"><div class="a">' + v + '</div></div></div>').join('') + '</div>' +
+    sec('ДОКУМЕНТЫ') +
+    '<div class="col" data-z="4">' + [['Пользовательское соглашение', 'v1.2'], ['Политика обработки данных', 'v1.1'], ['Правила покупок и возвратов', 'v1.0'], ['Методика оценки решений', 's-12'], ['Источники исторических данных', 'перечень']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag">›</span></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Сатира касается поведения рынка и индустрии, а не конкретных пострадавших людей.</div></div>', null),
+  zones: [['1', 'Топ-бар', 'h 40'], ['2', 'Главный дисклеймер', 'h 104'], ['3', 'Границы продукта (§2)', 'h 48/строка'], ['4', 'Список документов с версиями', 'h 48/строка'], ['5', 'Границы сатиры', 'h 44']],
+  rules: [['§2', 'Не терминал, не демо-счёт, не P2E'], ['§16', 'Никогда не шутить над реальными пострадавшими'], ['§15', 'Методика оценки открыта']],
+  states: ['Базовое', 'Первый запуск (обязательно�� принятие)'], jumps: ['12.1', '1.2']
+});
+
+add({
+  id: '12.4', grp: '11 · ЕЩЁ И НАСТРОЙКИ', title: 'Настройки уведомлений',
+  desc: 'Никаких шантажных пушей типа «ты теряешь деньги» — только учебные события.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>УВЕДОМЛЕНИЯ</span><span>4 ИЗ 6 ВКЛ</span></div><div class="bar c"><i style="width:66%"></i></div></div><div class="ico">?</div></div>' +
+    sec('ТИПЫ СОБЫТИЙ') +
+    '<div class="col" data-z="2">' + [['Урок дня готов', 'ежедневно 10:00', 1], ['Серия в опасности', 'за 3 ч до обнуления', 1], ['Закрытие окна турнира', 'за 6 ч', 1], ['Новые сценарии и главы', 'при выходе', 1], ['Ответ поддержки', 'по событию', 0], ['Акции магазина', 'не чаще 1 раза в неделю', 0]]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag' + (v[2] ? ' ac' : '') + '">' + (v[2] ? 'ВКЛ' : 'ВЫКЛ') + '</span></div>').join('') + '</div>' +
+    sec('РЕЖИМ ТИШИНЫ') +
+    '<div class="g2" data-z="3">' + [kv('НАЧАЛО', '23:00'), kv('КОНЕЦ', '09:00'), kv('ДНИ', 'ежедневно'), kv('КАНАЛ', 'push + e-mail')].join('') + '</div>' +
+    '<div class="card dash" data-z="4"><div class="lbl">ЗАПРЕЩЕННЫЕ ФОРМАТЫ</div>' +
+    '<div class="col" style="margin-top:7px;gap:4px">' + ['Сообщения о «упущенной выгоде»', 'Ложная срочность и таймеры в пушах', 'Давление на возврат после проигрыша']
+      .map(v => '<div class="t3">✗ ' + v + '</div>').join('') + '</div></div>' +
+    '<div style="flex:1;min-height:8px"></div>' +
+    '<div class="btn pri" data-z="5">Сохранить</div>', null),
+  zones: [['1', 'Топ-бар', 'h 40'], ['2', 'Переключатели событий', 'h 48/строка'], ['3', 'Режим тишины 2×2', 'клетка 177×46'], ['4', 'Запреты на токсичные пуши', 'h 96'], ['5', 'Сохранение', 'sticky, h 40']],
+  rules: [['§13', 'Нет шантажных и FOMO-механик в удержании'], ['Метрики', 'Удержание за счёт полезности, а не тревоги']],
+  states: ['Включено', 'Всё выключено', 'Режим тишины активен'], jumps: ['12.2', '12.1']
+});
+
+/* ---------------- 3. ГЛАВНАЯ (восстановленный блок) ---------------- */
+
+add({
+  id: '3.1', grp: '2 · ГЛАВНАЯ', title: 'Главная · главный экран',
+  desc: 'Точка входа в сессию: одно главное действие + доступ ко всем шести режимам ТЗ.',
+  render: () => screen(
+    topbar({ z: '1' }) +
+    '<div class="card" data-z="2"><div class="h2">СЕГОДНЯ РЫНОК СНОВА ПЕРЕСМАТРИВАЕТ РЕАЛЬНОСТЬ.</div>' +
+    '<div class="t3" style="margin-top:6px">Серия 7 дней · качество решений за неделю 74 / 100</div></div>' +
+    sec('ПРОДОЛЖИТЬ', 'СЦЕНАРИЙ 14/40') +
+    '<div class="card" data-z="3"><div class="row"><div style="flex:1">' +
+    '<div class="t">Серия из 3 · Ложные пробои</div>' +
+    '<div class="t3">Правило: Сначала риск · осталось 2 сценария</div>' +
+    '<div class="bar c" style="margin-top:7px"><i style="width:33%"></i></div>' +
+    '</div><div class="btn pri sm" data-go="4.3">Дальше →</div></div></div>' +
+    sec('РЕЖИМЫ') +
+    '<div class="g2" data-z="4">' +
+    [['ПРАКТИКА', 'сценарии и решения', '4.1'], ['ОБУЧЕНИЕ', 'теория → практика', '5.1'], ['УГРОЗЫ', '14 из 32 угроз', '6.1'], ['ЖУРНАЛ', '2 паттерна в работе', '8.1'], ['ТУРНИРЫ', 'окно закроется 2 д', '9.1'], ['МАГАЗИН', 'только косметика', '10.1']]
+      .map(v => '<div class="card" data-go="' + v[2] + '" style="height:64px;justify-content:center;cursor:pointer"><div class="t">' + v[0] + '</div><div class="t3">' + v[1] + '</div></div>').join('') + '</div>' +
+    sec('ЕЖЕДНЕВНОЕ') +
+    '<div class="col" data-z="5">' +
+    '<div class="li" data-go="5.4"><span class="lead">☉</span><div class="mid"><div class="a">Урок дня · Новость — не сигнал</div><div class="b">60–90 сек · +50 XP</div></div><span class="tag ac">ГОТОВ</span></div>' +
+    '<div class="li" data-go="8.2"><span class="lead">⚠</span><div class="mid"><div class="a">Исправление · E-007</div><div class="b">вход без подтверждения · 2/3</div></div><span class="tag am">АКТИВНА</span></div>' +
+    '<div class="li" data-go="9.1"><span class="lead">⚑</span><div class="mid"><div class="a">Турнир · Сухой объём</div><div class="b">3 из 5 сценариев сдано</div></div><span class="tag cy">2 д 14 ч</span></div>' +
+    '</div>' +
+    '<div style="flex:1;min-height:6px"></div>' +
+    '<div class="card dash" data-z="6" style="padding:8px 10px"><div class="t3">Не финрекомендация · исторические ситуации · будущее зафиксировано</div></div>',
+    'ГЛАВНАЯ'),
+  zones: [['1', 'Топ-бар (аватар, XP, валюты, колокольчик)', 'sticky, h 42'], ['2', 'Заголовок дня + качество недели', '362, h 72'], ['3', 'Продолжить — одно главное действие', '362, h 88'], ['4', 'Сетка режимов 2×3', 'клетка 177×64'], ['5', 'Ежедневные задачи', 'h 48/строка'], ['6', 'Постоянный дисклеймер', 'h 34'], ['N', 'Нижняя навигация — 5 слотов', 'sticky, h 64']],
+  rules: [['§6', 'Шесть режимов доступны с одного экрана'], ['Метрики', 'Сессия 8–12 мин: «Продолжить» всегда первым блоком'], ['NO', 'Нет котировок, тикеров и сигналов в реальном времени'], ['NO', 'Нет пушей про «упущенную выгоду»']],
+  states: ['Первый вход (нет серии)', 'Сессия на паузе', 'Серия в опасности', 'Всё выполнено'],
+  jumps: ['4.1', '5.1', '3.2', '3.3', '12.1']
+});
+
+add({
+  id: '3.2', grp: '2 · ГЛАВНАЯ', title: 'Уведомления',
+  desc: 'Только учебные события: прогресс, окна турниров, ответы. Без давления и тревоги.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>УВЕДОМЛЕНИЯ</span><span>3 НОВЫХ</span></div></div><div class="ico" data-go="12.4">⚙</div></div>' +
+    '<div class="row" data-z="2">' + ['ВСЕ', 'ПРОГРЕСС', 'ТУРНИРЫ', 'СИСТЕМА']
+      .map((v, i) => '<span class="tag' + (i === 0 ? ' ac' : '') + '">' + v + '</span>').join('') + '</div>' +
+    sec('НОВОЕ') +
+    '<div class="col" data-z="3">' +
+    [['☉', 'Глава 3 закрыта', '+240 монет и новая угроза в списке угроз', '15 мин', '6.2'],
+     ['⚑', 'Окно турнира закроется', 'Неделя 37 · сдано 3 из 5', '2 ч', '9.1'],
+     ['⚠', 'Паттерн повторился 5-й раз', 'E-007 · вход без подтверждения', 'вчера', '8.2']]
+      .map(v => '<div class="li" data-go="' + v[4] + '"><span class="lead">' + v[0] + '</span><div class="mid"><div class="a">' + v[1] + '</div><div class="b">' + v[2] + '</div></div><span class="tag">' + v[3] + '</span></div>').join('') + '</div>' +
+    sec('РАНЬШЕ') +
+    '<div class="col" data-z="4">' +
+    [['◈', 'Новая карта навыка', '«Условия отмены идеи»', '2 д', '7.2'],
+     ['⚙', 'Датасет обновлён до v2.4', '40 ситуаций · хеши пересчитаны', '4 д', '4.13'],
+     ['⚑', 'Неделя 36 завершена', 'Место 42 из 1208 · качество 71', '6 д', '9.4']]
+      .map(v => '<div class="li" data-go="' + v[4] + '"><span class="lead">' + v[0] + '</span><div class="mid"><div class="a">' + v[1] + '</div><div class="b">' + v[2] + '</div></div><span class="tag">' + v[3] + '</span></div>').join('') + '</div>' +
+    '<div style="flex:1;min-height:6px"></div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Запрещено: пуши про упущенную выгоду, ложная срочность, давление после проигрыша.</div></div>',
+    'ГЛАВНАЯ'),
+  zones: [['1', 'Топ-бар: назад + счётчик + настройки', 'h 42'], ['2', 'Фильтры-чипсы', 'h 24'], ['3', 'Новые события', 'h 48/строка'], ['4', 'Архив событий', 'h 48/строка'], ['5', 'Правила уведомлений', 'h 52'], ['N', 'Нижняя навигация', 'h 64']],
+  rules: [['§13', 'Удержание только через полезность'], ['NO', 'Никаких сообщений с торговыми рекомендациями']],
+  states: ['Пусто', 'Есть новые', 'Всё прочитано'], jumps: ['3.1', '12.4', '9.1']
+});
+
+add({
+  id: '3.3', grp: '2 · ГЛАВНАЯ', title: 'Глобальный поиск',
+  desc: 'Один поиск на весь продукт: главы, угрозы, карты, правила, записи журнала.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>ПОИСК</span><span>ПО ВСЕМУ ПРОДУКТУ</span></div></div><div class="ico">✕</div></div>' +
+    '<div class="q" data-z="2"><span class="ico">⌕</span><span class="t3">ложный пробой</span><span class="w"></span><span class="tag">18</span></div>' +
+    '<div class="row" data-z="3">' + ['ВСЕ 18', 'ГЛАВЫ 3', 'УГРОЗЫ 4', 'КАРТЫ 5', 'ЖУРНАЛ 6']
+      .map((v, i) => '<span class="tag' + (i === 0 ? ' ac' : '') + '">' + v + '</span>').join('') + '</div>' +
+    sec('УГРОЗЫ') +
+    '<div class="col" data-z="4">' +
+    [['Fake Breakout Phantom', 'сигналы и структура · стадия II', '6.2'],
+     ['Wick Mimic', 'сигналы и структура · силуэт', '6.3']]
+      .map(v => '<div class="li" data-go="' + v[2] + '"><span class="lead">☠</span><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag cy">ОТКРЫТО</span></div>').join('') + '</div>' +
+    sec('ОБУЧЕНИЕ') +
+    '<div class="col" data-z="5">' +
+    [['☉', 'Глава 4 · Подтверждение и ловушки', 'урок 5 из 8', '5.3'],
+     ['◈', 'Нет подтверждения — нет сделки', 'карта навыка · мастерство 2/3', '7.2'],
+     ['≡', 'Правило · Только доказательства', 'применён в 12 сценариях', '7.3'],
+     ['⚠', 'Запись журнала · E-007', '5 повторов · исправление', '8.2']]
+      .map(v => '<div class="li" data-go="' + v[3] + '"><span class="lead">' + v[0] + '</span><div class="mid"><div class="a">' + v[1] + '</div><div class="b">' + v[2] + '</div></div><span class="tag">→</span></div>').join('') + '</div>' +
+    '<div style="flex:1;min-height:6px"></div>' +
+    '<div class="card dash" data-z="6"><div class="t3">Идентификаторы активного сценария в поиске скрыты до завершения — античит §15.</div></div>',
+    'ГЛАВНАЯ'),
+  zones: [['1', 'Топ-бар поиска', 'h 42'], ['2', 'Поле ввода', '362, h 40'], ['3', 'Типы результатов', 'h 24'], ['4', 'Угрозы', 'h 48/строка'], ['5', 'Главы, карты, правила, журнал', 'h 48/строка'], ['6', 'Ограничение антич��та', 'h 52'], ['N', 'Нижняя навигация', 'h 64']],
+  rules: [['§15', 'Поиск не раскрывает активный сценарий до его завершения'], ['§5', 'После завершения доступны все источники и даты']],
+  states: ['Пустой запрос', 'Есть результаты', 'Ничего не найдено', 'Скрыто античитом'], jumps: ['3.1', '6.2', '7.3', '8.2']
+});
+
+/* ===== PART D — движок прототипа: навигация, сцена, спец-панель, обзор ===== */
+
+function kv(k, v) {
+  return '<div class="kv"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>';
+}
+
+(function injectStyles() {
+  var css = ''
+    + '.ent.lk{opacity:.55}'
+    + '.ent .ph{width:100%;height:100%}'
+    + '.li .lead{width:30px;text-align:center;font:700 11px/1 ui-monospace,monospace;color:var(--t3)}'
+    + 'span.node{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;border:1px solid var(--surf3);font:700 10px/1 ui-monospace,monospace;color:var(--t2);background:var(--surf);flex:none}'
+    + 'span.node.done{border-color:var(--acid);color:var(--acid)}'
+    + 'span.node.lock{opacity:.45}'
+    + 'span.node.lk{opacity:.45}'
+    + '.bar.rd i{background:var(--red)}'
+    + '.bar.gr i{background:var(--green)}'
+    + '.sk.hid{opacity:.35;filter:grayscale(1)}'
+    + '.zt{display:flex;flex-direction:column;gap:4px;background:none;border:0;padding:0}'
+    + '.zt .zc{display:grid;grid-template-columns:20px 1fr auto;gap:8px;align-items:center;background:var(--surf);border:1px solid var(--surf3);border-radius:6px;padding:6px 8px;font-size:11px;line-height:1.35;color:var(--t2);height:auto;width:auto}'
+    + '.zt .zc .zn{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;background:rgba(87,210,230,.16);border:1px solid var(--cyan);color:var(--cyan);font:700 9px/1 ui-monospace,monospace;position:static}'
+    + '.zt .zc .zg{font:400 10px/1.2 ui-monospace,monospace;color:var(--t3);white-space:nowrap;position:static;background:none}'
+    + '.spec .jump{display:block;width:100%;text-align:left;margin:0 0 4px;padding:8px 10px;background:var(--surf);border:1px solid var(--surf3);border-radius:8px;color:var(--t1);font-size:12px;line-height:1.3;cursor:pointer}'
+    + '.spec .jump:hover{border-color:var(--cyan);color:var(--cyan)}'
+    + '.spec .rules{display:flex;flex-direction:column;gap:5px}'
+    + '.spec .rule{display:grid;grid-template-columns:52px 1fr;gap:8px;font-size:11px;line-height:1.4;color:var(--t2)}'
+    + '.spec .rule b{color:var(--cyan);font:700 10px/1.5 ui-monospace,monospace}'
+    + '.spec .rule.no b{color:var(--red)}'
+    + '.spec .states{display:flex;flex-wrap:wrap;gap:4px}';
+  var s = document.createElement('style');
+  s.textContent = css;
+  document.head.appendChild(s);
+})();
+
+/* ============ PART C · ALPHA / EARLY ACCESS / REFERRAL / PREMIUM ============ */
+
+const EATABS = [['INTRO', '13.2'], ['STATUS', '13.3'], ['HELP', '13.4'], ['BENEFITS', '13.5'], ['ROADMAP', '13.6'], ['TOKEN', '13.7'], ['CTA', '13.8']];
+
+function eaHead(active) {
+  const n = EATABS.findIndex(t => t[0] === active) + 1;
+  return '<div class="tb" data-z="1"><div class="ico">✕</div>' +
+    '<div class="xpwrap"><div class="r"><span>EARLY ACCESS</span><span>АЛЬФА · ВКЛАДКА ' + n + '/7</span></div>' +
+    '<div class="bar c"><i style="width:' + Math.round(n / 7 * 100) + '%"></i></div></div>' +
+    '<div class="ico">?</div></div>' +
+    '<div class="row" data-z="2" style="flex-wrap:wrap;gap:5px">' +
+    EATABS.map(t => '<a href="#' + t[1] + '" class="tag' + (t[0] === active ? ' ac' : '') + '" style="text-decoration:none">' + t[0] + '</a>').join('') +
+    '</div>';
+}
+
+function bullets(arr, z, mark) {
+  return '<div class="col" data-z="' + z + '">' + arr.map(v =>
+    '<div class="li"><div class="lead">' + (mark || '·') + '</div><div class="mid"><div class="a">' + v + '</div></div></div>').join('') + '</div>';
+}
+
+const EA_ZONES_BASE = [['1', 'Шапка панели с крестиком и прогрессом вкладок', 'sticky, h 40'], ['2', 'Лента 7 вкладок (горизонтальный скролл / wrap)', 'h 24, чип 22']];
+
+/* ---------- 13.1 entry point ---------- */
+add({
+  id: '13.1', grp: '12 · РАННИЙ ДОСТУП',
+  title: 'Точка входа · кнопка EARLY ACCESS',
+  desc: 'Где живёт вход в панель: правый слот шапки Главной и блок под кнопкой старта.',
+  render: () => screen(
+    topbar({ z: '1' }) +
+    '<div class="row" data-z="2" style="gap:6px">' +
+    '<a href="#13.2" class="tag ac" style="text-decoration:none">EARLY ACCESS</a>' +
+    '<a href="#15.1" class="tag cy" style="text-decoration:none">ПРОФИЛЬ</a>' +
+    '<a href="#12.2" class="tag" style="text-decoration:none">НАСТРОЙКИ</a></div>' +
+    '<div class="card q" data-z="3"><div class="h">АЛЬФА. ВСЁ РАБОТАЕТ НЕ ТАК, КАК БУДЕТ.</div>' +
+    '<div class="t" style="margin-top:6px">Ранние участники видят статус разработки и помогают выбрать, что делать дальше.</div></div>' +
+    sec('ГЛАВНОЕ ДЕЙСТВИЕ') +
+    '<div class="col" data-z="4"><a href="#4.1" class="btn pri" style="text-decoration:none">Начать тренировку →</a>' +
+    '<div class="g2" style="margin-top:8px"><a href="#13.2" class="btn" style="text-decoration:none">EARLY ACCESS</a>' +
+    '<a href="#14.1" class="btn" style="text-decoration:none">Поделиться</a></div></div>' +
+    sec('СТАТУС УЧАСТНИКА') +
+    '<div class="card" data-z="5">' + kv('Статус', '<b>EARLY PLAYER</b>') + kv('Founder Badge', '<b>подтверждён</b>') +
+    kv('Premium', '<b>выдан админом</b>') + kv('Номер в истории', '<b>#0148</b>') + '</div>' +
+    '<div class="card dash" data-z="6"><div class="t3">Не инвестиция · 18+ · токена нет · roadmap может меняться</div></div>',
+    'ГЛАВНАЯ'),
+  zones: [['1', 'Топ-бар (аватар → профиль)', 'sticky, h 42'], ['2', 'Правый ряд служебных кнопок: EARLY ACCESS / ПРОФИЛЬ / НАСТРОЙКИ', 'h 24, чип 22'], ['3', 'Статус альфы одним блоком', '362, h 84'], ['4', 'Главное действие + 2 вторичные кнопки', 'кнопка h 40'], ['5', 'Карточка статуса участника · 4 строки kv', 'h 4×26'], ['6', 'Дисклеймер', 'h 34'], ['N', 'Нижняя навигация', 'sticky, h 64']],
+  rules: [['ТЗ 1.1', 'Кнопка EARLY ACCESS — в правом слоте, рядом с стартом и настройками'], ['ТЗ 8.1', 'Дисклеймер всюду, где упоминается будущее'], ['NO', 'Бейдж Premium нельзя включить с клиента']],
+  states: ['Обычный игрок', 'Early Player', 'Founder + Premium', 'Проверка статуса не ответила'],
+  jumps: ['13.2', '15.1', '14.1', '3.1']
+});
+
+/* ---------- 13.2 INTRO ---------- */
+add({
+  id: '13.2', grp: '12 · РАННИЙ ДОСТУП',
+  title: 'Early Access · INTRO',
+  desc: 'Вкладка 1 из 7. Зачем игрок здесь и что проверяет альфа.',
+  render: () => screen(
+    eaHead('INTRO') +
+    '<div class="card q" data-z="3"><div class="h">SIGNAL ARENA · PROOF OF SKILL</div>' +
+    '<div class="t" style="margin-top:6px">Ты внутри ранней альфа-версии. Игра уже работает, но часть систем ещё в разработке.</div></div>' +
+    sec('ЧТО МЫ ПРОВЕРЯЕМ СЕЙЧАС') +
+    bullets(['Насколько интересен основной игровой цикл', 'Возвращаются ли игроки', 'Какие режимы развивать первыми'], '4', '→') +
+    sec('ЧТО МОЖНО ДЕЛАТЬ') +
+    bullets(['Играть бесплатно', 'Приглашать друзей', 'Делиться проектом', 'Отправлять обратную связь'], '5', '✓') +
+    '<div style="flex:1;min-height:6px"></div>' +
+    '<div class="card dash" data-z="6"><div class="t3">Ранние участники получат особый статус и внутриигровые преимущества согласно правилам программы.</div></div>' +
+    '<div class="row" data-z="7" style="gap:8px"><a href="#13.3" class="btn pri" style="flex:1;text-decoration:none">Дальше →</a></div>',
+    null),
+  zones: EA_ZONES_BASE.concat([['3', 'Заголовочный блок вкладки', '362, h 88'], ['4', 'Список целей альфы', 'h 48/строка'], ['5', 'Список доступных действий', 'h 48/строка'], ['6', 'Сноска о статусе', 'h 44'], ['7', 'Нижняя кнопка перехода к вкладке 2', 'sticky, h 40']]),
+  rules: [['ТЗ 1.2', 'Текст INTRO без обещаний дохода'], ['ТЗ 1.1', 'Панель — модальное окно на 7 вкладок'], ['NO', 'Нет фраз про гарантированную выгоду']],
+  states: ['Первый показ (автооткрытие)', 'Открыта вручную'],
+  jumps: ['13.3', '13.8', '13.1']
+});
+
+/* ---------- 13.3 STATUS ---------- */
+add({
+  id: '13.3', grp: '12 · РАННИЙ ДОСТУП',
+  title: 'Early Access · STATUS',
+  desc: 'Вкладка 2 из 7. Что уже работает и что ещё может меняться.',
+  render: () => screen(
+    eaHead('STATUS') +
+    '<div class="card" data-z="3"><div class="h2">ЧТО УЖЕ РАБОТАЕТ</div>' +
+    '<div class="row" style="justify-content:space-between;margin-top:6px"><span class="t3">ГОТОВНОСТЬ АЛЬФЫ</span><span class="t3">7 ИЗ 7 БАЗОВЫХ</span></div>' +
+    '<div class="bar gr" style="margin-top:5px"><i style="width:100%"></i></div></div>' +
+    '<div class="col" data-z="4">' +
+    [['Игровой прототип', 'готово'], ['Базовый игровой цикл', 'готово'], ['Обучающие сценарии', 'готово'], ['Профиль игрока', 'готово'], ['Результаты матчей', 'готово'], ['Реферальные ссылки', 'готово'], ['Сбор обратной связи', 'готово']]
+      .map(v => '<div class="li"><div class="lead" style="color:var(--green)">✓</div><div class="mid"><div class="a">' + v[0] + '</div></div><span class="tag gr">' + v[1] + '</span></div>').join('') + '</div>' +
+    sec('В РАЗРАБОТКЕ') +
+    '<div class="col" data-z="5">' +
+    [['Серверные награды за рефералов', 'P1'], ['Лидерборды недели и месяца', 'P2'], ['Автокарточки результата', 'P2'], ['Расширенная статистика Premium', 'P2']]
+      .map(v => '<div class="li"><div class="lead">○</div><div class="mid"><div class="a">' + v[0] + '</div></div><span class="tag am">' + v[1] + '</span></div>').join('') + '</div>' +
+    '<div style="flex:1;min-height:6px"></div>' +
+    '<div class="card dash" data-z="6"><div class="t3">Некоторые функции могут изменяться во время альфа-теста.</div></div>' +
+    '<div class="row" data-z="7" style="gap:8px"><a href="#13.4" class="btn pri" style="flex:1;text-decoration:none">Дальше →</a></div>',
+    null),
+  zones: EA_ZONES_BASE.concat([['3', 'Шкала готовности', '362, h 68'], ['4', 'Список готового (7 строк)', 'h 48/строка'], ['5', 'Список в разработке с приоритетом', 'h 48/строка'], ['6', 'Предупреждение об изменениях', 'h 34'], ['7', 'Кнопка к вкладке 3', 'sticky, h 40']]),
+  rules: [['ТЗ 1.3', 'Список готового и оговорка об изменениях'], ['ТЗ 10.2', 'Статус обновляется ежемесячно'], ['NO', 'Нет дат релиза, которые нельзя гарантировать']],
+  states: ['Альфа', 'Бета (часть строк переезжает вверх)'],
+  jumps: ['13.4', '13.2', '16.1']
+});
+
+/* ---------- 13.4 HELP ---------- */
+add({
+  id: '13.4', grp: '12 · РАННИЙ ДОСТУП',
+  title: 'Early Access · HELP',
+  desc: 'Вкладка 3 из 7. Пять шагов помощи как чеклист с прогрессом.',
+  render: () => screen(
+    eaHead('HELP') +
+    '<div class="card q" data-z="3"><div class="h2">КАК ПОМОЧЬ</div>' +
+    '<div class="t3" style="margin-top:4px">Выполнено 2 из 5 · награды начисляет сервер</div>' +
+    '<div class="bar c" style="margin-top:6px"><i style="width:40%"></i></div></div>' +
+    '<div class="col" data-z="4">' +
+    [['1', 'Пройди обучение', '+200 XP', 'done'], ['2', 'Сыграй несколько матчей', '3 из 3', 'done'], ['3', 'Пригласи знакомого', '2 из 5', 'cur'], ['4', 'Поделись результатом', 'не сделано', ''], ['5', 'Отправь отзыв или баг-репорт', 'не сделано', '']]
+      .map(v => '<div class="li"><div class="lead" style="color:' + (v[3] === 'done' ? 'var(--green)' : v[3] === 'cur' ? 'var(--acid)' : 'var(--tx3)') + '">' + (v[3] === 'done' ? '✓' : v[0]) + '</div>' +
+        '<div class="mid"><div class="a">' + v[1] + '</div><div class="b">' + v[2] + '</div></div>' +
+        '<span class="tag' + (v[3] === 'done' ? ' gr' : v[3] === 'cur' ? ' ac' : '') + '">' + (v[3] === 'done' ? 'ГОТОВО' : v[3] === 'cur' ? 'СЕЙЧАС' : 'ЖДЁТ') + '</span></div>').join('') + '</div>' +
+    sec('БЫСТРЫЕ ДЕЙСТВИЯ') +
+    '<div class="g2" data-z="5"><a href="#14.1" class="btn" style="text-decoration:none">Поделиться</a><a href="#15.3" class="btn" style="text-decoration:none">Отправить отзыв</a></div>' +
+    '<div style="flex:1;min-height:6px"></div>' +
+    '<div class="card dash" data-z="6"><div class="t3">Награды начисляются за реальные действия и могут быть ограничены правилами защиты от накрутки.</div></div>' +
+    '<div class="row" data-z="7" style="gap:8px"><a href="#13.5" class="btn pri" style="flex:1;text-decoration:none">Дальше →</a></div>',
+    null),
+  zones: EA_ZONES_BASE.concat([['3', 'Заголовок + прогресс чеклиста', '362, h 76'], ['4', '5 шагов с наградой и статусом', 'h 48/строка'], ['5', 'Две быстрые кнопки', 'клетка 177×40'], ['6', 'Правила начисления', 'h 44'], ['7', 'Кнопка к вкладке 4', 'sticky, h 40']]),
+  rules: [['ТЗ 1.4', 'Пять шагов помощи именно в этом порядке'], ['ТЗ 6.1', 'Награда выдаётся только сервером'], ['NO', 'Клиент не считает награды сам']],
+  states: ['0 из 5', '2 из 5', 'Все шаги выполнены', 'Награда на ручной проверке'],
+  jumps: ['13.5', '14.1', '15.3', '14.3']
+});
+
+
+/* ---------- 13.5 BENEFITS ---------- */
+add({
+  id: '13.5', grp: '12 · РАННИЙ ДОСТУП',
+  title: 'Early Access · BENEFITS',
+  desc: 'Вкладка 4 из 7. Что получают ранние участники. Иконки строк: 20×20 SVG.',
+  render: () => screen(
+    eaHead('BENEFITS') +
+    '<div class="card q" data-z="3"><div class="h2">ЧТО ПОЛУЧАЮТ РАННИЕ УЧАСТНИКИ</div>' +
+    '<div class="t3" style="margin-top:4px">Статус выдаётся сервером и отображается в профиле</div></div>' +
+    '<div class="col" data-z="4">' +
+    [['Статус раннего игрока', 'активен'], ['Founder Badge', 'активен'], ['Пожизненный Premium', 'если подтверждён в админ-системе'], ['Приоритетный доступ к закрытым тестам', 'по очереди'], ['Дополнительные косметические награды', 'только внешний вид'], ['Участие в опросах о развитии', 'ежемесячно'], ['Запись в истории ранних участников', 'номер #0148']]
+      .map(v => '<div class="li"><div class="lead" style="color:var(--acid)">◆</div><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div></div>').join('') + '</div>' +
+    '<div class="card" data-z="5"><div class="t3" style="color:var(--red)">НЕ ВХОДИТ В СТАТУС</div>' +
+    '<div class="t" style="margin-top:4px">Преимущества в оценке, подсказки ответов, доход, доля в проекте.</div></div>' +
+    '<div style="flex:1;min-height:6px"></div>' +
+    '<div class="card dash" data-z="6"><div class="t3">Состав функций может уточняться до публичного релиза.</div></div>' +
+    '<div class="row" data-z="7" style="gap:8px"><a href="#13.6" class="btn pri" style="flex:1;text-decoration:none">Дальше →</a></div>',
+    null),
+  zones: EA_ZONES_BASE.concat([['3', 'Заголовок вкладки', '362, h 62'], ['4', '7 строк преимуществ, иконка 20×20', 'h 48/строка'], ['5', 'Блок ограничений (красный)', '362, h 58'], ['6', 'Оговорка', 'h 34'], ['7', 'Кнопка к вкладке 5', 'sticky, h 40']]),
+  rules: [['ТЗ 1.5', 'Пожизненный Premium — только при подтверждении в админ-системе'], ['ТЗ 5.3', 'Преимущества только косметические и доступные'], ['NO', 'Нет экономических преимуществ и влияния на оценку']],
+  states: ['Без статуса', 'Early Player', 'Founder + Premium'],
+  jumps: ['13.6', '15.2', '15.1']
+});
+
+/* ---------- 13.6 ROADMAP ---------- */
+add({
+  id: '13.6', grp: '12 · РАННИЙ ДОСТУП',
+  title: 'Early Access · ROADMAP',
+  desc: 'Вкладка 5 из 7. Пять этапов с KPI и текущей позицией.',
+  render: () => screen(
+    eaHead('ROADMAP') +
+    '<div class="row" data-z="3" style="gap:0">' +
+    [['1', 'АЛЬФА', 'cur'], ['2', 'БЕТА', 'lk'], ['3', 'ДОХОД', 'lk'], ['4', 'WEB3', 'lk'], ['5', 'РОСТ', 'lk']]
+      .map(v => '<div class="node ' + v[2] + '"><div class="o">' + v[0] + '</div><div class="cap">' + v[1] + '</div></div>').join('') + '</div>' +
+    '<div class="col" data-z="4">' +
+    [['ЭТАП 1 · АЛЬФА', 'сейчас', 'Проверка основного игрового цикла и обучение игроков', '10K–50K MAU · D30 больше 3%', 'ac'],
+      ['ЭТАП 2 · БЕТА', 'месяцы 6–18', 'Профили, лидерборды, реферальная система, аналитика, контент', '50K–200K MAU · D30 больше 6%', 'cy'],
+      ['ЭТАП 3 · МОНЕТИЗАЦИЯ', 'месяцы 12–24', 'Платные цифровые функции через поддерживаемые Telegram-инструменты', '$100K–500K/год · Premium 5–10%', 'am'],
+      ['ЭТАП 4 · WEB3-ИССЛЕДОВАНИЕ', 'месяцы 18–36', 'Изучение NFT, токена и TON только после проверки продукта, экономики, безопасности и юридической модели', '200K–1M MAU · $500K–2M/год', 'vi'],
+      ['ЭТАП 5 · МАСШТАБИРОВАНИЕ', 'месяцы 36+', 'Веб-версия, дополнительные платформы, сервисы и партнёрские интеграции', '1M–5M MAU · $1M–5M/год', 'mg']]
+      .map(v => '<div class="card" style="padding:10px"><div class="row" style="justify-content:space-between"><span class="t3">' + v[0] + '</span><span class="tag ' + v[4] + '">' + v[1] + '</span></div>' +
+        '<div class="t" style="margin-top:5px">' + v[2] + '</div>' +
+        '<div class="t3" style="margin-top:6px">KPI · ' + v[3] + '</div></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Roadmap может меняться: отзывы игроков · техническая осуществимость · наличие финансирования · юридические требования</div></div>' +
+    '<div class="row" data-z="6" style="gap:8px"><a href="#13.7" class="btn pri" style="flex:1;text-decoration:none">Дальше →</a></div>',
+    null),
+  zones: EA_ZONES_BASE.concat([['3', 'Шкала этапов (5 узлов, кружок 28)', 'h 56'], ['4', '5 карточек этапов с KPI', '362, h 96 каждая'], ['5', 'Оговорка об изменении плана', 'h 44'], ['6', 'Кнопка к вкладке 6', 'sticky, h 40']]),
+  rules: [['ТЗ 1.6', 'Пять этапов с KPI как в ТЗ'], ['ТЗ 8.1', 'Дисклеймер об изменении roadmap'], ['NO', 'Этапы не подаются как обещания с датами']],
+  states: ['Альфа активна', 'Бета активна', 'Этап сдвинут'],
+  jumps: ['13.7', '13.5']
+});
+
+/* ---------- 13.7 TOKEN NOTE ---------- */
+add({
+  id: '13.7', grp: '12 · РАННИЙ ДОСТУП',
+  title: 'Early Access · TOKEN NOTE',
+  desc: 'Вкладка 6 из 7. Честный блок про будущие блокчейн-функции.',
+  render: () => screen(
+    eaHead('TOKEN') +
+    '<div class="card q" data-z="3"><div class="h">ТОКЕНА НЕТ. И ЭТО НЕ ОПЕЧАТКА.</div>' +
+    '<div class="t" style="margin-top:6px">Сейчас у Signal Arena нет запущенного токена, NFT-контракта или кошелька для получения токенов.</div></div>' +
+    '<div class="card" data-z="4"><div class="t">Блокчейн рассматривается как возможный слой для отдельных цифровых активов и подтверждения владения. Сначала проверяем, нужен ли он игре.</div></div>' +
+    sec('РАННЕЕ УЧАСТИЕ НЕ ОЗНАЧАЕТ') +
+    '<div class="col" data-z="5">' +
+    ['Гарантированный airdrop', 'Гарантированную цену', 'Гарантированный листинг', 'Обещанную прибыль', 'Право на долю в проекте']
+      .map(v => '<div class="li"><div class="lead" style="color:var(--red)">✕</div><div class="mid"><div class="a">' + v + '</div></div></div>').join('') + '</div>' +
+    sec('РЕАЛИСТИЧНЫЕ ЦЕЛИ', 'по бенчмаркам') +
+    '<div class="card" data-z="6">' +
+    kv('Год 1', '<b>10K–50K MAU</b>') + kv('Год 2', '<b>50K–200K MAU</b>') + kv('Год 3', '<b>200K–1M MAU</b>') + '</div>' +
+    '<div class="card q" data-z="7"><div class="t">93% GameFi-проектов проваливаются. Наша цель — попасть в топ-10% выживших.</div></div>' +
+    '<div class="card dash" data-z="8"><div class="t3">Это не инвестиция. Цифровые товары с внутриигровой утилитой могут обесцениться. Только 18+. Проверяйте локальные законы.</div></div>' +
+    '<div class="row" data-z="9" style="gap:8px"><a href="#13.8" class="btn pri" style="flex:1;text-decoration:none">Дальше →</a></div>',
+    null),
+  zones: EA_ZONES_BASE.concat([['3', 'Главное утверждение', '362, h 84'], ['4', 'Пояснение про возможный слой', '362, h 62'], ['5', '5 запретов (красные иконки 20×20)', 'h 48/строка'], ['6', 'Три строки целей', 'h 3×26'], ['7', 'Цитата про 93%', '362, h 58'], ['8', 'Юридический дисклеймер', 'h 52'], ['9', 'Кнопка к вкладке 7', 'sticky, h 40']]),
+  rules: [['ТЗ 1.7', 'Прямо сказано: токена, контракта и кошелька нет'], ['ТЗ 8.1', 'Дисклеймер 18+ и о локальных законах'], ['NO', 'Ни одного обещания airdrop или дохода']],
+  states: ['Альфа (токена нет)', 'Исследование объявлено', 'Условия опубликованы отдельно'],
+  jumps: ['13.8', '12.3', '13.6']
+});
+
+/* ---------- 13.8 CTA ---------- */
+add({
+  id: '13.8', grp: '12 · РАННИЙ ДОСТУП',
+  title: 'Early Access · CTA',
+  desc: 'Вкладка 7 из 7. Четыре действия: обучение, шеринг, отзыв, канал.',
+  render: () => screen(
+    eaHead('CTA') +
+    '<div class="card q" data-z="3"><div class="h">ГОТОВ ПОМОЧЬ?</div>' +
+    '<div class="t" style="margin-top:6px">Пройди первый матч и отправь Signal Arena человеку, которому может быть интересен такой формат.</div></div>' +
+    '<div class="col" data-z="4">' +
+    '<a href="#4.1" class="btn pri" style="text-decoration:none">ПРОЙТИ ОБУЧЕНИЕ</a>' +
+    '<a href="#14.1" class="btn" style="text-decoration:none;margin-top:8px">ПОДЕЛИТЬСЯ ИГРОЙ</a>' +
+    '<a href="#15.3" class="btn" style="text-decoration:none;margin-top:8px">ОТПРАВИТЬ ОТЗЫВ</a>' +
+    '<a href="#15.3" class="btn gho" style="text-decoration:none;margin-top:8px">ПОДПИСАТЬСЯ НА КАНАЛ ↗</a></div>' +
+    sec('КУДА ВЕДЁТ КАЖДАЯ КНОПКА') +
+    '<div class="card" data-z="5">' +
+    kv('Обучение', 'закрыть панель → tutorial') +
+    kv('Поделиться', 'панель шеринга') +
+    kv('Отзыв', 'внешняя форма') +
+    kv('Канал', 'новая вкладка Telegram') + '</div>' +
+    '<div style="flex:1;min-height:6px"></div>' +
+    '<div class="card dash" data-z="6"><div class="t3">Панель можно открыть снова в профиле и в разделе «Ещё».</div></div>',
+    null),
+  zones: EA_ZONES_BASE.concat([['3', 'Призыв', '362, h 88'], ['4', '4 кнопки в столбец', 'кнопка h 44, gap 8'], ['5', 'Схема переходов', 'h 4×26'], ['6', 'Напоминание, где искать панель', 'h 34']]),
+  rules: [['ТЗ 1.8', 'Ровно четыре действия в заданном порядке'], ['ТЗ 2.1', 'Шеринг открывается отсюда и из профиля'], ['NO', 'Не требовать подписку как условие награды']],
+  states: ['Обучение не пройдено', 'Обучение пройдено (первая кнопка становится вторичной)'],
+  jumps: ['4.1', '14.1', '15.3', '15.1']
+});
+
+
+/* ---------- 14.1 SHARE PANEL ---------- */
+add({
+  id: '14.1', grp: '13 · ПОДЕЛИТЬСЯ И ПРИГЛАСИТЬ',
+  title: 'Панель шеринга',
+  desc: 'Открывается из вкладки CTA и из профиля. Результат матча + ссылка + 3 действия.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">✕</div><div class="xpwrap"><div class="r"><span>ПОДЕЛИТЬСЯ РЕЗУЛЬТАТОМ</span><span>АЛЬФА</span></div></div><div class="ico">?</div></div>' +
+    sec('ТВОЙ ПОСЛЕДНИЙ МАТЧ') +
+    '<div class="card" data-z="2">' +
+    kv('Режим', '<b>Tactical Arena</b>') + kv('Результат', '<b>Victory</b>') +
+    kv('P&amp;L', '<b>+2.3%</b>') + kv('Skill Score', '<b>78/100</b>') + '</div>' +
+    sec('ТВОЯ ССЫЛКА') +
+    '<div class="card" data-z="3"><div class="t3">РЕФЕРАЛЬНАЯ ССЫЛКА</div>' +
+    '<div class="t" style="margin-top:5px;word-break:break-all">t.me/your_bot/signalarena?startapp=<b>abc123</b></div>' +
+    '<div class="row" style="margin-top:8px;gap:6px"><span class="tag cy">КОД 6–8 СИМВОЛОВ</span><span class="tag">СОЗДАЁТСЯ ПРИ ПЕРВОМ ВХОДЕ</span></div></div>' +
+    '<div class="col" data-z="4">' +
+    '<a href="#14.2" class="btn pri" style="text-decoration:none">СКОПИРОВАТЬ ССЫЛКУ</a>' +
+    '<a href="#14.2" class="btn" style="text-decoration:none;margin-top:8px">ПОДЕЛИТЬСЯ В TELEGRAM ↗</a>' +
+    '<a href="#14.2" class="btn" style="text-decoration:none;margin-top:8px">СОЗДАТЬ КАРТОЧКУ</a></div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Ссылка одна на все время. Награды начисляются только за реальные действия друга.</div></div>',
+    null),
+  zones: [['1', 'Шапка панели с крестиком (иконка 20×20)', 'sticky, h 40'], ['2', 'Карточка последнего матча · 4 строки', 'h 4×26'], ['3', 'Блок реферальной ссылки', '362, h 92'], ['4', '3 кнопки действий', 'кнопка h 44'], ['5', 'Правила начисления', 'h 44']],
+  rules: [['ТЗ 2.2', 'Показываем режим, результат, P&amp;L, Skill Score'], ['ТЗ 4.1', 'Ссылка вида startapp=код'], ['NO', 'Нельзя редактировать цифры результата вручную']],
+  states: ['Есть матч', 'Матчей ещё нет (блок заменяется приглашением в обучение)', 'Ссылка скопирована (тост 2 с)', 'Оффлайн'],
+  jumps: ['14.2', '14.3', '15.1', '13.8']
+});
+
+/* ---------- 14.2 RESULT CARD ---------- */
+add({
+  id: '14.2', grp: '13 · ПОДЕЛИТЬСЯ И ПРИГЛАСИТЬ',
+  title: 'Карточка результата',
+  desc: 'Предпросмотр генерируемого изображения 1080×1350 для отправки.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>КАРТОЧКА РЕЗУЛЬТАТА</span><span>1080×1350</span></div></div><div class="ico">⚙</div></div>' +
+    '<div class="card" data-z="2" style="padding:0;overflow:hidden">' +
+    '<div style="padding:14px 14px 10px;border-bottom:1px solid var(--ln)"><div class="t3">SIGNAL ARENA · PROOF OF SKILL</div>' +
+    '<div class="h" style="margin-top:6px">РЫНОК ПРИНЯЛ МОЁ РЕШЕНИЕ.</div></div>' +
+    '<div class="ph" style="height:150px;border-radius:0">ГРАФИК СИТУАЦИИ · СТАТИЧНЫЙ SVG</div>' +
+    '<div style="padding:12px 14px">' + kv('Режим', '<b>Tactical Arena</b>') + kv('Результат', '<b>Victory</b>') + kv('Skill Score', '<b>78/100</b>') + '</div>' +
+    '<div style="padding:0 14px 14px" class="t3">t.me/your_bot/signalarena?startapp=abc123</div></div>' +
+    sec('ФОРМАТЫ') +
+    '<div class="row" data-z="3" style="gap:6px;flex-wrap:wrap"><span class="tag ac">1080×1350 ПОСТ</span><span class="tag">1080×1920 СТОРИС</span><span class="tag">1200×630 ЛИНК-ПРЕВЬЮ</span></div>' +
+    '<div class="col" data-z="4"><a href="#14.1" class="btn pri" style="text-decoration:none">СОХРАНИТЬ И ОТПРАВИТЬ</a>' +
+    '<a href="#14.1" class="btn gho" style="text-decoration:none;margin-top:8px">Назад к шерингу</a></div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Карточка собирается на клиенте из SVG-шаблона: шрифты в кривые, фон растровый WebP до 120 КБ.</div></div>',
+    null),
+  zones: [['1', 'Шапка с возвратом', 'sticky, h 40'], ['2', 'Предпросмотр карточки (пропорция 4:5)', '362×452'], ['3', 'Выбор формата', 'чип h 22'], ['4', 'Кнопки сохранения', 'кнопка h 44'], ['5', 'Техническая сноска по ассетам', 'h 44']],
+  rules: [['ТЗ 2.2', 'Кнопка СОЗДАТЬ КАРТОЧКУ генерирует изображение'], ['АССЕТЫ', 'Шаблон SVG + растровый фон, экспорт PNG'], ['NO', 'Не печатать на карточке обещания дохода']],
+  states: ['Генерация', 'Готово', 'Ошибка генерации (текстовый фоллбэк)'],
+  jumps: ['14.1', '15.1']
+});
+
+/* ---------- 14.3 REFERRAL PROGRAM ---------- */
+add({
+  id: '14.3', grp: '13 · ПОДЕЛИТЬСЯ И ПРИГЛАСИТЬ',
+  title: 'Реферальная программа',
+  desc: 'Таблица наград и статус приглашённых. Только то, что видит игрок.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>ПРИГЛАСИ ДРУГА</span><span>НАГРАДЫ ОБОИМ</span></div></div><div class="ico">?</div></div>' +
+    '<div class="card q" data-z="2"><div class="h2">ПРИГЛАСИ ТОГО, КОМУ ЭТО ДЕЙСТВИТЕЛЬНО ИНТЕРЕСНО.</div></div>' +
+    sec('ТАБЛИЦА НАГРАД') +
+    '<div class="col" data-z="3">' +
+    [['Завершил обучение', '+100 XP', '+200 XP'], ['Первый матч', '+300 XP + косметика', '+500 XP'], ['Возврат на следующий день', '+500 XP + бустер', '+1000 XP']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">тебе ' + v[1] + ' · другу ' + v[2] + '</div></div></div>').join('') + '</div>' +
+    sec('ТВОИ ПРИГЛАШЕННЫЕ', '3 всего') +
+    '<div class="g3" data-z="4">' +
+    [['Приглашено', '3'], ['Активных', '2'], ['Награда', '+600 XP']]
+      .map(v => '<div class="card" style="padding:10px"><div class="t3">' + v[0] + '</div><div class="big" style="margin-top:4px">' + v[1] + '</div></div>').join('') + '</div>' +
+    '<div class="col" data-z="5">' +
+    [['Друг 1', 'обучение и первый матч', '+400 XP', 'gr'], ['Друг 2', 'обучение', '+100 XP', 'gr'], ['Друг 3', 'ещё не начал', 'ждём', '']]
+      .map(v => '<div class="li"><div class="lead">○</div><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><span class="tag ' + v[3] + '">' + v[2] + '</span></div>').join('') + '</div>' +
+    '<div class="col" data-z="6"><a href="#14.1" class="btn pri" style="text-decoration:none">Поделиться ссылкой</a></div>' +
+    '<div class="card dash" data-z="7"><div class="t3">Награды начисляются только за реальные действия. Защита от накрутки работает на сервере и игроку не видна.</div></div>',
+    null),
+  zones: [['1', 'Шапка', 'sticky, h 40'], ['2', 'Заголовок', '362, h 56'], ['3', 'Таблица наград (3 события)', 'h 48/строка'], ['4', 'Три счётчика', 'клетка 116×66'], ['5', 'Список приглашённых', 'h 48/строка'], ['6', 'Кнопка шеринга', 'h 44'], ['7', 'Правила начисления', 'h 44']],
+  rules: [['ТЗ 4.2', 'Таблица наград как в ТЗ'], ['ТЗ 6.1', 'Реферер привязывается один раз и не меняется'], ['NO', 'Нет экранов антифрода в игре — это админка']],
+  states: ['Нет приглашённых', 'Есть активные', 'Награда на проверке (строка серая)'],
+  jumps: ['14.1', '15.1']
+});
+
+/* ---------- 15.1 ALPHA PROFILE ---------- */
+add({
+  id: '15.1', grp: '14 · ПРОФИЛЬ АЛЬФЫ',
+  title: 'Профиль игрока (альфа)',
+  desc: 'Статистика, рефералы, достижения, статус токена и три кнопки.',
+  render: () => screen(
+    topbar({ z: '1', sig: false }) +
+    '<div class="row" data-z="2" style="gap:10px;align-items:center">' +
+    '<div class="ph" style="width:56px;height:56px;border-radius:12px;flex:none">56×56</div>' +
+    '<div style="flex:1"><div class="h2">@victor</div>' +
+    '<div class="row" style="gap:5px;margin-top:5px"><span class="tag ac">EARLY PLAYER</span><span class="tag">DEMO / LOCAL</span></div></div></div>' +
+    sec('СТАТИСТИКА') +
+    '<div class="g3" data-z="3">' +
+    [['XP', '12 450'], ['УРОВЕНЬ', '42'], ['МАТЧЕЙ', '15'], ['ПОБЕД', '9 · 60%'], ['СЕРИЯ', '4'], ['SKILL', '78/100']]
+      .map(v => '<div class="card" style="padding:10px"><div class="t3">' + v[0] + '</div><div class="big" style="margin-top:4px">' + v[1] + '</div></div>').join('') + '</div>' +
+    sec('РЕФЕРАЛЫ', 'подробнее →') +
+    '<div class="card" data-z="4">' + kv('Приглашено', '<b>3</b>') + kv('Активных', '<b>2</b>') + kv('Награда', '<b>+600 XP</b>') + '</div>' +
+    sec('ДОСТИЖЕНИЯ') +
+    '<div class="col" data-z="5">' +
+    [['First Match', '✓', 'gr'], ['Early Player', '✓', 'gr'], ['Streak 4', '✓', 'gr'], ['Referral Master', '2 из 5', 'am'], ['Win Streak 10', '4 из 10', 'am']]
+      .map(v => '<div class="li"><div class="lead" style="color:' + (v[2] === 'gr' ? 'var(--green)' : 'var(--amber)') + '">' + (v[2] === 'gr' ? '✓' : '◷') + '</div><div class="mid"><div class="a">' + v[0] + '</div></div><span class="tag ' + v[2] + '">' + v[1] + '</span></div>').join('') + '</div>' +
+    sec('SIGNAL TOKEN') +
+    '<div class="card" data-z="6"><div class="t">Not launched. No wallet balance is available in the alpha version.</div></div>' +
+    '<div class="col" data-z="7"><a href="#13.2" class="btn pri" style="text-decoration:none">EARLY ACCESS</a>' +
+    '<div class="g2" style="margin-top:8px"><a href="#14.1" class="btn" style="text-decoration:none">SHARE</a>' +
+    '<a href="#12.2" class="btn" style="text-decoration:none">SETTINGS</a></div></div>',
+    'ЕЩЁ'),
+  zones: [['1', 'Топ-бар без баланса токена', 'sticky, h 42'], ['2', 'Шапка профиля: аватар 56×56 + имя + 2 чипа', 'h 56'], ['3', 'Сетка статистики 3×2', 'клетка 116×66'], ['4', 'Блок рефералов', 'h 3×26'], ['5', 'Достижения, иконка 20×20', 'h 48/строка'], ['6', 'Статус токена (текст без баланса)', '362, h 52'], ['7', 'Три кнопки действий', 'h 44 + 2×40'], ['N', 'Нижняя навигация', 'sticky, h 64']],
+  rules: [['ТЗ 3.2', 'Порядок блоков как в ТЗ'], ['ТЗ 5.1', 'Premium отображается, но не переключается из игры'], ['NO', 'Нет баланса кошелька в альфе']],
+  states: ['Без статуса', 'Early Player', 'Founder + Premium (появляется бейдж)', 'Нет связи с сервером'],
+  jumps: ['13.2', '14.1', '15.2', '12.2']
+});
+
+/* ---------- 15.2 FOUNDER PREMIUM ---------- */
+add({
+  id: '15.2', grp: '14 · ПРОФИЛЬ АЛЬФЫ',
+  title: 'Founder Premium · статус',
+  desc: 'То, что видит игрок: статус, что входит и что не входит.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>FOUNDER PREMIUM</span><span>СТАТУС</span></div></div><div class="ico">?</div></div>' +
+    '<div class="card q" data-z="2"><div class="row" style="justify-content:space-between"><div class="h2">СТАТУС АКТИВЕН</div><span class="tag gr">ПОЖИЗНЕННО</span></div>' +
+    '<div class="t3" style="margin-top:6px">Выдан администрацией как раннему участнику. Включить его из игры нельзя.</div></div>' +
+    sec('ЧТО ДАЁТ') +
+    '<div class="col" data-z="3">' +
+    ['Отключение рекламы (в будущей версии)', 'Дополнительные косметические слоты', 'Расширенная статистика', 'Ранний доступ к режимам', 'Повышенный лимит тренировочных попыток', 'Значок Founder', 'Доступ к закрытым событиям']
+      .map(v => '<div class="li"><div class="lead" style="color:var(--green)">✓</div><div class="mid"><div class="a">' + v + '</div></div></div>').join('') + '</div>' +
+    sec('ЧЕГО НЕ ДАЁТ') +
+    '<div class="col" data-z="4">' +
+    ['Бесконечный фарм токенов', 'Экономические преимущества', 'Влияние на оценку решений']
+      .map(v => '<div class="li"><div class="lead" style="color:var(--red)">✕</div><div class="mid"><div class="a">' + v + '</div></div></div>').join('') + '</div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Статус проверяется при каждом запуске через Telegram. Если проверка не прошла, премиум-блоки просто не показываются.</div></div>',
+    null),
+  zones: [['1', 'Шапка', 'sticky, h 40'], ['2', 'Карточка статуса', '362, h 76'], ['3', 'Список возможностей (7)', 'h 48/строка'], ['4', 'Список ограничений (3)', 'h 48/строка'], ['5', 'Сноска о проверке статуса', 'h 44']],
+  rules: [['ТЗ 5.1', 'Premium — не переключатель во фронтенде'], ['ТЗ 5.3', 'Списки «даёт» и «не даёт» показываются рядом'], ['NO', 'Нет экрана покупки статуса в альфе']],
+  states: ['Статус активен', 'Статуса нет (экран поясняет, как его получают)', 'Проверка не прошла'],
+  jumps: ['15.1', '13.5']
+});
+
+/* ---------- 15.3 FEEDBACK / CHANNEL ---------- */
+add({
+  id: '15.3', grp: '14 · ПРОФИЛЬ АЛЬФЫ',
+  title: 'Обратная связь и канал',
+  desc: 'Отзыв, баг-репорт, опрос и ссылки на канал и чат.',
+  render: () => screen(
+    '<div class="tb" data-z="1"><div class="ico">‹</div><div class="xpwrap"><div class="r"><span>ОБРАТНАЯ СВЯЗЬ</span><span>АЛЬФА</span></div></div><div class="ico">?</div></div>' +
+    '<div class="card q" data-z="2"><div class="h2">СКАЖИ, ГДЕ БОЛЬНО.</div>' +
+    '<div class="t" style="margin-top:6px">Один точный отзыв полезнее ста лайков.</div></div>' +
+    '<div class="col" data-z="3">' +
+    [['Отправить отзыв', 'внешняя форма', '↗'], ['Сообщить об ошибке', 'форма баг-репорта', '↗'], ['Пройти опрос месяца', '5 вопросов · 2 минуты', '↗'], ['Канал проекта', 'новости и отчёты', '↗'], ['Чат участников', 'обсуждение решений', '↗']]
+      .map(v => '<div class="li"><div class="mid"><div class="a">' + v[0] + '</div><div class="b">' + v[1] + '</div></div><div class="end">' + v[2] + '</div></div>').join('') + '</div>' +
+    sec('ЧТО ПОЛЕЗНО НАПИСАТЬ') +
+    '<div class="card" data-z="4"><div class="t">Где было непонятно · на каком экране бросил · что хочется играть дальше · что выглядит нечестно</div></div>' +
+    '<div class="card dash" data-z="5"><div class="t3">Внешние ссылки открываются в новой вкладке. Подписка не требуется для наград.</div></div>',
+    null),
+  zones: [['1', 'Шапка', 'sticky, h 40'], ['2', 'Заголовок', '362, h 76'], ['3', '5 строк-ссылок, иконка выхода 16×16', 'h 48/строка'], ['4', 'Подсказка, что писать', '362, h 62'], ['5', 'Сноска', 'h 44']],
+  rules: [['ТЗ 1.8', 'Отзыв и канал — внешние ссылки'], ['ТЗ 10.1', 'Опрос обновляется регулярно'], ['NO', 'Не привязывать награды к подписке на канал']],
+  states: ['Обычный', 'Отзыв уже отправлен сегодня', 'Опрос недоступен'],
+  jumps: ['15.1', '13.8']
+});
+
+NAVITEMS.length = 0;
+NAVITEMS.push(['\u2302', 'ГЛАВНАЯ', '3.1'], ['\u2609', 'ОБУЧЕНИЕ', '5.1'], ['\u25b7', 'ПРАКТИКА', '4.1'], ['\u26a0', 'УГРОЗЫ', '6.1'], ['\u22ef', 'ЕЩЁ', '12.1']);
+
+S.sort(function (a, b) {
+  var pa = a.id.split('.').map(Number), pb = b.id.split('.').map(Number);
+  return (pa[0] - pb[0]) || (pa[1] - pb[1]);
+});
+
+var $ = function (s) { return document.querySelector(s); };
+var byId = function (id) { return S.find(function (s) { return s.id === id; }); };
+
+var cur = S[0].id, anno = true, grid = false, ovw = false, filter = '';
+
+function groups() {
+  var out = [], map = {};
+  S.forEach(function (s) {
+    if (!map[s.grp]) { map[s.grp] = { name: s.grp, items: [] }; out.push(map[s.grp]); }
+    map[s.grp].items.push(s);
+  });
+  return out;
+}
+
+function match(s) {
+  if (!filter) return true;
+  var q = filter.toLowerCase();
+  return (s.id + ' ' + s.title + ' ' + (s.desc || '') + ' ' + s.grp).toLowerCase().indexOf(q) >= 0;
+}
+
+function renderNav() {
+  var html = '<div class="find"><input id="q" placeholder="Поиск экрана, раздела, элемента" value="' + filter.replace(/"/g, '&quot;') + '"></div>';
+  groups().forEach(function (g) {
+    var items = g.items.filter(match);
+    if (!items.length) return;
+    html += '<div class="grp"><h3>' + g.name + '<i>' + items.length + '</i></h3>';
+    items.forEach(function (s) {
+      html += '<a data-go="' + s.id + '"' + (s.id === cur ? ' class="on"' : '') + '><em>' + s.id + '</em><span>' + s.title + '</span></a>';
+    });
+    html += '</div>';
+  });
+  $('#nav').innerHTML = html;
+  var q = $('#q');
+  q.addEventListener('input', function (e) { filter = e.target.value; renderNav(); $('#q').focus(); });
+}
+
+function devHtml(s) {
+  return '<div class="dev' + (anno ? ' anno' : '') + (grid ? ' grid' : '') + '">' + s.render() + '</div>';
+}
+
+function renderStage() {
+  var s = byId(cur);
+  $('#stage').innerHTML = devHtml(s)
+    + '<div class="cap">' + s.id + ' · ' + s.title + ' · 390×844 · контент-ширина 362</div>';
+}
+
+function renderSpec() {
+  var s = byId(cur), all = S.length, idx = S.indexOf(s) + 1, h = '';
+  h += '<h4>Экран ' + s.id + ' <i>' + idx + '/' + all + '</i></h4>';
+  h += '<div class="t">' + s.title + '</div>';
+  h += '<div class="t3">' + (s.desc || '') + '</div>';
+  h += '<h4>Карта зон и геометрия</h4><div class="zt">';
+  (s.zones || []).forEach(function (z) {
+    h += '<div class="zc"><span class="zn">' + z[0] + '</span><span>' + z[1] + '</span><span class="zg">' + z[2] + '</span></div>';
+  });
+  h += '</div>';
+  if (s.rules && s.rules.length) {
+    h += '<h4>Правила ТЗ и ограничения</h4><div class="rules">';
+    s.rules.forEach(function (r) {
+      var no = r[0] === 'NO';
+      h += '<div class="rule' + (no ? ' no' : '') + '"><b>' + (no ? '✗' : r[0]) + '</b><span>' + r[1] + '</span></div>';
+    });
+    h += '</div>';
+  }
+  if (s.states && s.states.length) {
+    h += '<h4>Состояния экрана</h4><div class="states">';
+    s.states.forEach(function (t) { h += '<span class="tag">' + t + '</span>'; });
+    h += '</div>';
+  }
+  if (s.jumps && s.jumps.length) {
+    h += '<h4>Переходы</h4>';
+    s.jumps.forEach(function (id) {
+      var t = byId(id);
+      if (t) h += '<button class="jump" data-go="' + id + '">' + id + ' · ' + t.title + '</button>';
+    });
+  }
+  h += '<h4>Как читать прототип</h4><div class="t3">Пунктирные рамки — зоны компоновки (кнопка «Аннотации»). «Сетка 24px» включает базовую сетку и поля 14px. «Все экраны» — карта всех разделов. Стрелки ← → листают экраны.</div>';
+  $('#spec').innerHTML = h;
+}
+
+function renderOverview() {
+  var h = '<div class="ovw">';
+  groups().forEach(function (g) {
+    var items = g.items.filter(match);
+    if (!items.length) return;
+    h += '<div class="ovh">' + g.name + ' <i>' + items.length + '</i></div><div class="gr">';
+    items.forEach(function (s) {
+      h += '<div class="mini" data-go="' + s.id + '"><div class="box">' + devHtml(s) + '</div>'
+        + '<div class="cap"><em>' + s.id + '</em> ' + s.title + '</div></div>';
+    });
+    h += '</div>';
+  });
+  h += '</div>';
+  $('#stage').innerHTML = h;
+}
+
+function renderSingle() {
+  if (!document.getElementById('nav')) {
+    $('#main').innerHTML = '<nav class="nav" id="nav"></nav><div class="stage" id="stage"></div><aside class="spec" id="spec"></aside>';
+  }
+  renderNav(); renderStage(); renderSpec();
+}
+
+function paint() {
+  if (ovw) {
+    $('#main').innerHTML = '<nav class="nav" id="nav"></nav><div class="stage" id="stage"></div>';
+    renderNav(); renderOverview();
+  } else {
+    renderSingle();
+  }
+  $('#cnt').textContent = (S.indexOf(byId(cur)) + 1) + ' / ' + S.length + ' · ' + groups().length + ' разделов';
+}
+
+function go(id) {
+  if (!byId(id)) return;
+  cur = id;
+  history.replaceState(null, '', '#' + id);
+  if (ovw) { ovw = false; $('#tOvw').setAttribute('aria-pressed', 'false'); }
+  paint();
+  var st = $('#stage'); if (st) st.scrollTop = 0;
+}
+
+document.addEventListener('click', function (e) {
+  var t = e.target.closest('[data-go]');
+  if (t) { go(t.getAttribute('data-go')); }
+});
+
+$('#tAnno').addEventListener('click', function () {
+  anno = !anno; this.setAttribute('aria-pressed', String(anno)); paint();
+});
+$('#tGrid').addEventListener('click', function () {
+  grid = !grid; this.setAttribute('aria-pressed', String(grid)); paint();
+});
+$('#tOvw').addEventListener('click', function () {
+  ovw = !ovw; this.setAttribute('aria-pressed', String(ovw)); paint();
+});
+
+window.addEventListener('hashchange', function () {
+  var id = location.hash.replace('#', '');
+  if (id && byId(id) && id !== cur) go(id);
+});
+
+document.addEventListener('keydown', function (e) {
+  var tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'input' || tag === 'textarea') return;
+  if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+  var i = S.indexOf(byId(cur));
+  var n = e.key === 'ArrowRight' ? i + 1 : i - 1;
+  if (n < 0) n = S.length - 1;
+  if (n >= S.length) n = 0;
+  go(S[n].id);
+});
+
+(function boot() {
+  var id = location.hash.replace('#', '');
+  if (id && byId(id)) cur = id;
+  paint();
+})();
+
+</script>
+</body>
+</html>
